@@ -63,10 +63,15 @@ def construct_lower_leg():
     except Exception as e:
         print(f"Notice: Lower leg chamfer fallback: {e}")
 
-    # 5. Forward Cradle Arm for Bottom Large Tray (slanted at ~65°)
-    cradle = Part.makeBox(thickness, 50.0 * params.SCALE, 16.0 * params.SCALE, App.Vector(0, 60.0 * params.SCALE, 90.0 * params.SCALE))
-    cradle.rotate(App.Vector(0, 60.0 * params.SCALE, 90.0 * params.SCALE), App.Vector(1, 0, 0), -25.0)
-    leg_body = leg_body.fuse(cradle)
+    # 5. Forward-Upward Cradle Arm for Bottom Large Tray (TRAY_LARGE) with front retaining lip
+    cradle_base = Part.makeBox(thickness, 55.0 * params.SCALE, 16.0 * params.SCALE, App.Vector(0, 30.0 * params.SCALE, 75.0 * params.SCALE))
+    cradle_base.rotate(App.Vector(0, 30.0 * params.SCALE, 75.0 * params.SCALE), App.Vector(1, 0, 0), 25.0)
+
+    # Front retaining lip stop at front tip of cradle arm
+    lip = Part.makeBox(thickness, 14.0 * params.SCALE, 20.0 * params.SCALE, App.Vector(0, 75.0 * params.SCALE, 95.0 * params.SCALE))
+    
+    cradle_arm = cradle_base.fuse(lip)
+    leg_body = leg_body.fuse(cradle_arm)
 
     # 6. Crossbar Mounting Bosses & 13mm M12 Clearance Bores
     # Boss 1: Front Base (Y=25, Z=15)

@@ -40,10 +40,15 @@ def construct_middle_leg():
         pass
     leg_body = riser
 
-    # 2. Middle Cradle Arms for Medium Bowl (TRAY_MEDIUM) at Z=190mm
-    cradle = Part.makeBox(thickness, 55.0 * params.SCALE, 16.0 * params.SCALE, App.Vector(0, 65.0 * params.SCALE, 190.0 * params.SCALE))
-    cradle.rotate(App.Vector(0, 65.0 * params.SCALE, 190.0 * params.SCALE), App.Vector(1, 0, 0), -25.0)
-    leg_body = leg_body.fuse(cradle)
+    # 2. Middle Cradle Arms for Medium Bowl (TRAY_MEDIUM) at Z=180mm
+    cradle_base = Part.makeBox(thickness, 55.0 * params.SCALE, 16.0 * params.SCALE, App.Vector(0, 40.0 * params.SCALE, 175.0 * params.SCALE))
+    cradle_base.rotate(App.Vector(0, 40.0 * params.SCALE, 175.0 * params.SCALE), App.Vector(1, 0, 0), 25.0)
+
+    # Front retaining lip stop at front tip of cradle arm
+    lip = Part.makeBox(thickness, 14.0 * params.SCALE, 20.0 * params.SCALE, App.Vector(0, 85.0 * params.SCALE, 195.0 * params.SCALE))
+
+    cradle_arm = cradle_base.fuse(lip)
+    leg_body = leg_body.fuse(cradle_arm)
 
     # 3. Middle Crossbar Mounting Boss (13mm M12 Clearance Bore) at Y=60mm, Z=185mm
     cyl = Part.makeCylinder(bore_r, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, 60.0 * params.SCALE, 185.0 * params.SCALE), App.Vector(1, 0, 0))

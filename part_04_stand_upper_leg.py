@@ -39,10 +39,15 @@ def construct_upper_leg():
         pass
     leg_body = riser
 
-    # 2. Upper Cradle Arms for Small Bowl (TRAY_SMALL) at Z=300mm
-    cradle = Part.makeBox(thickness, 50.0 * params.SCALE, 16.0 * params.SCALE, App.Vector(0, 70.0 * params.SCALE, 300.0 * params.SCALE))
-    cradle.rotate(App.Vector(0, 70.0 * params.SCALE, 300.0 * params.SCALE), App.Vector(1, 0, 0), -25.0)
-    leg_body = leg_body.fuse(cradle)
+    # 2. Upper Cradle Arms for Small Bowl (TRAY_SMALL) at Z=290mm
+    cradle_base = Part.makeBox(thickness, 50.0 * params.SCALE, 16.0 * params.SCALE, App.Vector(0, 45.0 * params.SCALE, 290.0 * params.SCALE))
+    cradle_base.rotate(App.Vector(0, 45.0 * params.SCALE, 290.0 * params.SCALE), App.Vector(1, 0, 0), 25.0)
+
+    # Front retaining lip stop at front tip of cradle arm
+    lip = Part.makeBox(thickness, 14.0 * params.SCALE, 20.0 * params.SCALE, App.Vector(0, 85.0 * params.SCALE, 310.0 * params.SCALE))
+
+    cradle_arm = cradle_base.fuse(lip)
+    leg_body = leg_body.fuse(cradle_arm)
 
     # 3. Top Crossbar Mounting Boss (13mm M12 Clearance Bore) at Y=62mm, Z=320mm
     cyl = Part.makeCylinder(bore_r, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, 62.0 * params.SCALE, 320.0 * params.SCALE), App.Vector(1, 0, 0))
