@@ -1,0 +1,8 @@
+exports/
+3d-print/
+media/
+__pycache__/
+*.pyc
+*.pyo
+*.FCBak
+.DS_Store
