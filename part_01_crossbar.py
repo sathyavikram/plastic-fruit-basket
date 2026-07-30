@@ -27,7 +27,8 @@ def create_female_thread_cutter(t_radius, t_pitch, depth):
     t_r_inner = t_radius - (t_pitch * 0.45)
     t_helix = Part.makeHelix(t_pitch, depth, t_r_inner, 0)
 
-    inner_X = t_r_inner - 2.0 * params.SCALE
+    # Female thread profile extending from inner radius to outer thread major radius
+    inner_X = t_r_inner - 1.0 * params.SCALE
     p1 = App.Vector(inner_X,  0, -t_pitch * 0.35)
     p2 = App.Vector(t_radius, 0, -t_pitch * 0.10)
     p3 = App.Vector(t_radius, 0,  t_pitch * 0.10)
@@ -36,12 +37,12 @@ def create_female_thread_cutter(t_radius, t_pitch, depth):
 
     t_sweep = Part.Wire(t_helix).makePipeShell([t_wire], True, True)
 
-    # Core bore cylinder slightly longer to clean entry/exit faces
-    t_core = Part.makeCylinder(t_r_inner, depth + 2.0, App.Vector(0, 0, -1.0))
+    # Core bore cylinder starting at Z=-1.0 extending to Z=depth+1.0 along +Z
+    t_core = Part.makeCylinder(t_r_inner, depth + 2.0, App.Vector(0, 0, -1.0), App.Vector(0, 0, 1.0))
 
     # Lead-in entry chamfer cone (1.5mm chamfer for self-guiding thread engagement)
     chamfer_depth = 1.5 * params.SCALE
-    lead_in = Part.makeCone(t_radius + chamfer_depth, t_radius, chamfer_depth, App.Vector(0, 0, -0.5))
+    lead_in = Part.makeCone(t_radius + chamfer_depth, t_r_inner, chamfer_depth, App.Vector(0, 0, -0.5), App.Vector(0, 0, 1.0))
 
     thread_cutter = t_core.fuse(t_sweep).fuse(lead_in).removeSplitter()
     return thread_cutter
