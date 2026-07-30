@@ -13,7 +13,7 @@ Build, validate, and commit before moving to the next phase.
 
 ---
 
-## Phase 1 — Project Skeleton (`freecad-project`)
+## Phase 1 — Project Skeleton (`freecad-project`) ✅
 - Create `params.py` with single source of truth: `SCALE = 1.0`, target dimensions (375 mm H, 160 mm D, 320 mm W), `SCREW_THREAD_DIAMETER = 16.0`, `THREAD_PITCH = 3.5`, `CROSSBAR_LENGTH = 170.0`, `CROSSBAR_DIAMETER = 24.0`, build-plate limit (175 mm), tolerances (`FIT_CLEARANCE = 0.4`, `THREAD_CLEARANCE = 0.6`), `PROJECT_DIR`, `EXPORT_DIR`
 - Create `exports/`, `3d-print/`, `media/` directories
 - Create executable `run.sh` build script and `.gitignore`
