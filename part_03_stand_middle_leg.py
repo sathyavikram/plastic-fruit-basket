@@ -65,6 +65,19 @@ def construct_middle_leg():
 
     leg_body = leg_body.fuse(tenon1).fuse(tenon2).removeSplitter()
 
+    # 6. Apply smooth 2.0mm fillets to outer edges for organic rounded aesthetics
+    try:
+        fillet_edges = []
+        for edge in leg_body.Edges:
+            if isinstance(edge.Curve, Part.LineSegment):
+                p1, p2 = edge.Vertex1.Point, edge.Vertex2.Point
+                if edge.Length >= 12.0 * params.SCALE and p1.Z > h_start and p2.Z > h_start and p1.Z < h_end and p2.Z < h_end:
+                    fillet_edges.append(edge)
+        if fillet_edges:
+            leg_body = leg_body.makeFillet(2.0 * params.SCALE, fillet_edges)
+    except Exception as e:
+        print(f"Notice: Middle leg fillet fallback: {e}")
+
     # Export clean STEP and STL
     os.makedirs(EXPORT_BASE, exist_ok=True)
     for path in (EXPORT_STEP, EXPORT_STL):
