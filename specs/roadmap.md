@@ -14,7 +14,7 @@ Build, validate, and commit before moving to the next phase.
 ---
 
 ## Phase 1 — Project Skeleton (`freecad-project`) ✅
-- Create `params.py` with single source of truth: `SCALE = 1.0`, target dimensions (375 mm H, 160 mm D, 320 mm W), `SCREW_THREAD_DIAMETER = 16.0`, `THREAD_PITCH = 3.5`, `CROSSBAR_LENGTH = 170.0`, `CROSSBAR_DIAMETER = 24.0`, build-plate limit (175 mm), tolerances (`FIT_CLEARANCE = 0.4`, `THREAD_CLEARANCE = 0.6`), `PROJECT_DIR`, `EXPORT_DIR`
+- Create `params.py` with single source of truth: `SCALE = 1.0`, target dimensions (375 mm H, 160 mm D, 320 mm W), `SCREW_THREAD_DIAMETER = 12.0`, `THREAD_PITCH = 2.5`, `CROSSBAR_LENGTH = 170.0`, `CROSSBAR_DIAMETER = 18.0`, build-plate limit (175 mm), tolerances (`FIT_CLEARANCE = 0.4`, `THREAD_CLEARANCE = 0.6`), `PROJECT_DIR`, `EXPORT_DIR`
 - Create `exports/`, `3d-print/`, `media/` directories
 - Create executable `run.sh` build script and `.gitignore`
 - Smoke-test: `python params.py` executes without error
@@ -22,8 +22,8 @@ Build, validate, and commit before moving to the next phase.
 ---
 
 ## Phase 2 — Horizontal Crossbars (`part_01_crossbar.py` — `freecad-threading`) ✅
-- 4 cylindrical support rods / crossbars (length 170 mm, outer diameter 24 mm) spanning between left and right side frames
-- Features integrated M16 female threaded sockets on both ends (providing 4.0 mm solid plastic wall around threads) via `freecad-threading`
+- 4 cylindrical support rods / crossbars (length 170 mm, outer diameter 18 mm) spanning between left and right side frames
+- Features integrated M12 female threaded sockets on both ends (providing 3.0 mm solid plastic wall around threads) via `freecad-threading`
 - Print orientation: flat on the bed; export STEP + STL; execute `freecad-visual-validation` pass
 
 ---
@@ -38,8 +38,8 @@ Build, validate, and commit before moving to the next phase.
 ---
 
 ## Phase 4 — Threaded Fasteners & Thumb Pins (`part_05_threaded_pin.py` — `freecad-threading`)
-- **M16 × 3.5 mm coarse thread** thumb screw with chunky 28 mm ergonomic knurled head
-- Used to lock side stand frames to crossbars through 24 mm side panel bosses
+- **M12 × 2.5 mm coarse thread** thumb screw with 24 mm ergonomic knurled head
+- Used to lock side stand frames to crossbars through side panel bosses
 - Thread profile optimized for FDM printing with 60° self-supporting overhangs and 0.6 mm diametral thread clearance (`THREAD_CLEARANCE = 0.6 mm`)
 - Export STEP + STL; execute `freecad-visual-validation` pass
 

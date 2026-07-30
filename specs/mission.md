@@ -33,9 +33,9 @@ Based on reference images (`specs/reference-images/1.jpg`, `2.jpg`, `3.jpg`) and
 - **Modular Split Frame Construction**: Total height of 375 mm exceeds the 175 mm build height limit; each side frame is split into 3 stackable interlocking sections (`Lower Leg` ~135 mm, `Middle Segment` ~135 mm, `Upper Segment` ~135 mm) connected via mortise-and-tenon and alignment peg joints.
 
 ### 4. Crossbars & Fasteners (100% 3D Printed)
-- **4 Round Support Rods / Crossbars (Printed)**: Length ~170 mm (fits flat on 175 mm bed), 20 mm outer diameter; connects left and right side frames (2 at the base for wide-stance stability, 2 along the vertical structure).
-- **Large Fat Threaded Fasteners (Printed)**: **M16 × 3.5 mm coarse thread** thumb screws with a chunky 28 mm ergonomic knurled head.
-  - **Why M16 × 3.5 mm**: Large 16 mm shaft diameter provides high shear strength, and 3.5 mm pitch creates deep, self-supporting 60° thread teeth that print cleanly with a standard 0.4 mm nozzle without support structures or binding (0.6 mm diametral clearance).
+- **4 Round Support Rods / Crossbars (Printed)**: Length 170 mm (fits flat on 175 mm bed), 18 mm outer diameter; connects left and right side frames (2 at the base for wide-stance stability, 2 along the vertical structure).
+- **Large Fat Threaded Fasteners (Printed)**: **M12 × 2.5 mm coarse thread** thumb screws with a 24 mm ergonomic knurled head.
+  - **Why M12 × 2.5 mm**: 12 mm shaft diameter provides high shear strength, and 2.5 mm pitch creates deep, self-supporting 60° thread teeth that print cleanly with a standard 0.4 mm nozzle without support structures or binding (0.6 mm diametral clearance).
 
 ### 5. Integrated Anti-Slip Base Feet (Single Component)
 - **Integrated Base Feet**: Flared, wide-stance foot pads are integrated directly into the bottom of the lower stand legs (`Lower Leg`) as single monolithic 3D-printed parts — eliminating separate snap-on caps.
@@ -55,7 +55,7 @@ Makers, 3D printing enthusiasts, and home organizers looking for a sleek, modula
 ## Success Criteria
 
 - **Complete 3D Printability**: Both the frame structure (legs, crossbars, fasteners) AND all 3 bowls are 100% 3D printed with zero non-printable parts.
-- **Parametric Scalability**: Modifying `SCALE` in `params.py` resizes all components, bowls, crossbars, and screws in total geometric alignment.
+- **Parametric Scalability**: Modifying `SCALE` in `params.py` resizes all components, bowls, crossbars (18 mm OD), and screws (M12) in total geometric alignment.
 - **Bed Volume Compliance**: Every individual part fits within the 175 × 175 × 175 mm FDM build volume at `SCALE = 1.0`.
 - **Manifold Topology**: All exported STL files pass 100% manifold validation with zero non-manifold edges or self-intersections.
 - **Dimensional Fidelity**: Assembled model matches target canonical reference dimensions (375 mm H, 160 mm D, 320 mm W at `SCALE = 1.0`) within ±1.0 mm.

@@ -13,11 +13,11 @@ TOTAL_BASE_DEPTH   = 160.0 * SCALE
 TOTAL_STAND_WIDTH  = 320.0 * SCALE
 
 # --- Structural & Fit Parameters ---
-SCREW_THREAD_DIAMETER = 16.0 * SCALE   # M16 large fat 3D-printable thumb screw
-THREAD_PITCH          = 3.5 * SCALE    # 3.5 mm coarse thread pitch
-SCREW_HEAD_DIAMETER   = 28.0 * SCALE   # 28 mm ergonomic knurled thumb head
+SCREW_THREAD_DIAMETER = 12.0 * SCALE   # M12 fat 3D-printable thumb screw
+THREAD_PITCH          = 2.5 * SCALE    # 2.5 mm coarse thread pitch
+SCREW_HEAD_DIAMETER   = 24.0 * SCALE   # 24 mm ergonomic knurled thumb head
 CROSSBAR_LENGTH       = 170.0 * SCALE  # 170 mm crossbar length (fits flat on 175 mm bed)
-CROSSBAR_DIAMETER     = 24.0 * SCALE   # 24 mm outer diameter (provides 4.0 mm wall around M16 thread)
+CROSSBAR_DIAMETER     = 18.0 * SCALE   # 18 mm outer diameter (provides 3.0 mm wall around M12 thread)
 FRAME_THICKNESS       = 20.0 * SCALE   # 20 mm side frame panel thickness
 FRAME_BOSS_DIAMETER   = 24.0 * SCALE   # 24 mm reinforced boss around screw seats
 WALL_THICKNESS        = 3.5 * SCALE    # 3.5 mm structural wall thickness

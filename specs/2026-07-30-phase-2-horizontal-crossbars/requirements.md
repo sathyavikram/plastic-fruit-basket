@@ -5,10 +5,10 @@ Design and export 3D-printable horizontal support crossbars (`part_01_crossbar.p
 
 ## Decisions
 - Quantity: 4 identical crossbars required in full assembly.
-- Outer Diameter: `24.0 * SCALE` mm ($12.0\text{ mm}$ radius).
+- Outer Diameter: `18.0 * SCALE` mm ($9.0\text{ mm}$ radius).
 - Length: `170.0 * SCALE` mm (fits flat on 175 × 175 mm FDM build plate).
-- Internal Sockets: M16 × 3.5 mm female threads cut to 25 mm depth at both ends.
-- Wall Clearance: $4.0\text{ mm}$ solid plastic structural wall surrounding the internal thread sockets ($24\text{ mm}$ OD vs $16\text{ mm}$ thread major diameter).
+- Internal Sockets: M12 × 2.5 mm female threads cut to 25 mm depth at both ends.
+- Wall Clearance: $3.0\text{ mm}$ solid plastic structural wall surrounding the internal thread sockets ($18\text{ mm}$ OD vs $12\text{ mm}$ thread major diameter).
 - Entry Chamfer: 1.5 mm at 45° at both thread socket entrances for toolless self-guiding thread engagement.
 - Print Orientation: Flat on XY plane along length axis.
 

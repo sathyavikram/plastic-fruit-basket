@@ -16,10 +16,10 @@
 
 4. **FreeCAD MCP Server Bounding Box Dimension Check (`inspect_freecad_assembly`)**:
    - Execute `inspect_freecad_assembly` with `show_dimensions: true`.
-   - **Pass Criteria**: Outer dimensions match $24.0\text{ mm} \times 24.0\text{ mm} \times 170.0\text{ mm}$ ($\pm 0.5\text{ mm}$).
+   - **Pass Criteria**: Outer dimensions match $18.0\text{ mm} \times 18.0\text{ mm} \times 170.0\text{ mm}$ ($\pm 0.5\text{ mm}$).
 
 ## Manual Review
-- Confirm solid wall thickness around M16 thread is $\ge 3.5\text{ mm}$.
+- Confirm solid wall thickness around M12 thread is $\ge 3.0\text{ mm}$.
 - Confirm chamfers exist on outer rims and thread entries.
 
 ## Merge Criteria
