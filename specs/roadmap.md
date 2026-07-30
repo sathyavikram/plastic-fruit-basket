@@ -28,7 +28,7 @@ Build, validate, and commit before moving to the next phase.
 
 ---
 
-## Phase 3 — 3-Piece Split Side Stand Frames (`part_02_stand_lower_leg.py`, `part_03_stand_middle_leg.py`, `part_04_stand_upper_leg.py` — `freecad-fits-tolerances`)
+## Phase 3 — 3-Piece Split Side Stand Frames (`part_02_stand_lower_leg.py`, `part_03_stand_middle_leg.py`, `part_04_stand_upper_leg.py` — `freecad-fits-tolerances`) ✅
 - Because total stand height (375 mm) exceeds the 175 mm bed limit, split each organic S-curved side frame into 3 stackable interlocking sections:
   - `part_02_stand_lower_leg.py`: Wide-base foot section (~135 mm H) with **integrated flared base pads & recessed rubber pad pockets**, base crossbar mounts, and male alignment pegs (`FIT_CLEARANCE = 0.4 mm`).
   - `part_03_stand_middle_leg.py`: Middle S-curve section (~135 mm H) with middle crossbar mounts and female/male alignment joints.
