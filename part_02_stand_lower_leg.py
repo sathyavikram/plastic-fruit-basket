@@ -49,6 +49,20 @@ def construct_lower_leg():
     riser = Part.makeBox(thickness, 40.0 * params.SCALE, height - 25.0 * params.SCALE, App.Vector(0, 30.0 * params.SCALE, 25.0 * params.SCALE))
     leg_body = leg_body.fuse(riser)
 
+    # Apply smooth 1.5mm chamfer to vertical wall edges
+    try:
+        c_edges = []
+        for edge in leg_body.Edges:
+            if isinstance(edge.Curve, Part.LineSegment):
+                p1, p2 = edge.Vertexes[0].Point, edge.Vertexes[-1].Point
+                # Select purely vertical riser edges parallel to Z axis
+                if abs(p1.x - p2.x) < 0.1 and abs(p1.y - p2.y) < 0.1 and abs(p1.z - p2.z) > 15.0 * params.SCALE and min(p1.z, p2.z) > 26.0 * params.SCALE and max(p1.z, p2.z) < (height - 2.0 * params.SCALE):
+                    c_edges.append(edge)
+        if c_edges:
+            leg_body = leg_body.makeChamfer(1.5 * params.SCALE, c_edges)
+    except Exception as e:
+        print(f"Notice: Lower leg chamfer fallback: {e}")
+
     # 5. Forward Cradle Arm for Bottom Large Tray (slanted at ~65°)
     cradle = Part.makeBox(thickness, 50.0 * params.SCALE, 16.0 * params.SCALE, App.Vector(0, 60.0 * params.SCALE, 90.0 * params.SCALE))
     cradle.rotate(App.Vector(0, 60.0 * params.SCALE, 90.0 * params.SCALE), App.Vector(1, 0, 0), -25.0)
@@ -72,19 +86,19 @@ def construct_lower_leg():
 
     leg_body = leg_body.fuse(tenon1).fuse(tenon2).removeSplitter()
 
-    # 8. Apply smooth 2.5mm fillets to outer edges for organic rounded aesthetics
+    # 8. Apply smooth 3.0mm fillets to outer side wall edges for an organic rounded profile
     try:
         fillet_edges = []
         for edge in leg_body.Edges:
-            if isinstance(edge.Curve, Part.LineSegment):
-                p1, p2 = edge.Vertex1.Point, edge.Vertex2.Point
-                # Select long outer structural edges (skipping top joint face Z=height)
-                if edge.Length >= 12.0 * params.SCALE and p1.Z < height and p2.Z < height:
+            if hasattr(edge, "Vertexes") and len(edge.Vertexes) >= 2:
+                p1 = edge.Vertexes[0].Point
+                p2 = edge.Vertexes[-1].Point
+                if edge.Length > 4.0 * params.SCALE and p1.z > 1.0 * params.SCALE and p2.z > 1.0 * params.SCALE and p1.z < (height - 1.0 * params.SCALE) and p2.z < (height - 1.0 * params.SCALE):
                     fillet_edges.append(edge)
         if fillet_edges:
-            leg_body = leg_body.makeFillet(2.0 * params.SCALE, fillet_edges)
+            leg_body = leg_body.makeFillet(3.0 * params.SCALE, fillet_edges)
     except Exception as e:
-        print(f"Notice: Lower leg fillet fallback: {e}")
+        print(f"Notice: Lower leg wall fillet fallback: {e}")
 
     # Export clean STEP and STL
     os.makedirs(EXPORT_BASE, exist_ok=True)

@@ -32,6 +32,11 @@ def construct_upper_leg():
 
     # 1. Main Upper Riser Body (starts at Z=250mm up to 375mm)
     riser = Part.makeBox(thickness, 35.0 * params.SCALE, leg_height, App.Vector(0, 45.0 * params.SCALE, h_start))
+    try:
+        r_edges = [e for e in riser.Edges if e.Length >= 35.0 * params.SCALE]
+        riser = riser.makeFillet(2.0 * params.SCALE, r_edges)
+    except Exception:
+        pass
     leg_body = riser
 
     # 2. Upper Cradle Arms for Small Bowl (TRAY_SMALL) at Z=300mm
@@ -54,18 +59,18 @@ def construct_upper_leg():
 
     leg_body = leg_body.cut(mortise1).cut(mortise2).removeSplitter()
 
-    # 5. Apply smooth 2.0mm fillets to outer edges for organic rounded aesthetics
+    # 5. Apply smooth 1.5mm chamfer to vertical wall edges
     try:
-        fillet_edges = []
+        c_edges = []
         for edge in leg_body.Edges:
             if isinstance(edge.Curve, Part.LineSegment):
-                p1, p2 = edge.Vertex1.Point, edge.Vertex2.Point
-                if edge.Length >= 12.0 * params.SCALE and p1.Z > h_start and p2.Z > h_start:
-                    fillet_edges.append(edge)
-        if fillet_edges:
-            leg_body = leg_body.makeFillet(2.0 * params.SCALE, fillet_edges)
+                p1, p2 = edge.Vertexes[0].Point, edge.Vertexes[-1].Point
+                if abs(p1.z - p2.z) > 10.0 * params.SCALE and p1.z > (h_start + 5.0 * params.SCALE) and p2.z > (h_start + 5.0 * params.SCALE):
+                    c_edges.append(edge)
+        if c_edges:
+            leg_body = leg_body.makeChamfer(1.5 * params.SCALE, c_edges)
     except Exception as e:
-        print(f"Notice: Upper leg fillet fallback: {e}")
+        print(f"Notice: Upper leg chamfer fallback: {e}")
 
     # Export clean STEP and STL
     os.makedirs(EXPORT_BASE, exist_ok=True)
