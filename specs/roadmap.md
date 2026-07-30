@@ -21,7 +21,7 @@ Build, validate, and commit before moving to the next phase.
 
 ---
 
-## Phase 2 — Horizontal Crossbars (`part_01_crossbar.py` — `freecad-threading`)
+## Phase 2 — Horizontal Crossbars (`part_01_crossbar.py` — `freecad-threading`) ✅
 - 4 cylindrical support rods / crossbars (length 170 mm, outer diameter 24 mm) spanning between left and right side frames
 - Features integrated M16 female threaded sockets on both ends (providing 4.0 mm solid plastic wall around threads) via `freecad-threading`
 - Print orientation: flat on the bed; export STEP + STL; execute `freecad-visual-validation` pass
