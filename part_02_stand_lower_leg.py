@@ -32,10 +32,11 @@ def construct_lower_leg():
     boss_r    = (params.CROSSBAR_DIAMETER / 2.0) + (3.0 * params.SCALE)     # 12mm (24mm OD boss)
 
     # 1. Main Base Bar (horizontal foot along Y-axis)
-    back_y = params.get_leg_y_at_z(0.0)
+    # Start it at Y=-100 and chop it with the outer leg cylinder so its back perfectly matches the leg curve
     center_y = depth - 10.0 * params.SCALE
-    base_length = center_y - back_y
-    base_bar = Part.makeBox(thickness, base_length, 25.0 * params.SCALE, App.Vector(0, back_y, 0))
+    base_bar_raw = Part.makeBox(thickness, center_y + 100.0 * params.SCALE, 25.0 * params.SCALE, App.Vector(0, -100.0 * params.SCALE, 0))
+    outer_cyl_full_base = Part.makeCylinder(params.R_BACK, thickness, App.Vector(0, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
+    base_bar = base_bar_raw.common(outer_cyl_full_base)
 
     # 2. Flared Base Feet at front (Y=10) and rear (Y=150)
     foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 5.0 * params.SCALE, 0))
@@ -105,32 +106,6 @@ def construct_lower_leg():
 
     leg_body = leg_body.fuse(curved_tip).fuse(cap)
     
-    # 5a. Massive C-Shaped Fillet filling the gap between Bottom Arm and Middle Arm (Z=25 to 125)
-    gap_start_z = 25.0 * params.SCALE
-    gap_end_z = 125.0 * params.SCALE
-    R = (gap_end_z - gap_start_z) / 2.0
-    mid_z = gap_start_z + R
-    
-    # Front surface of the leg at mid_z
-    y_front_mid = params.get_leg_y_at_z(mid_z) + 9.9 * params.SCALE
-    Y_c = y_front_mid + R
-    Z_c = mid_z
-    
-    # Solid block filling the gap, extending deep enough to ensure fusion
-    web_y_min = -100.0 * params.SCALE
-    web_y_max = Y_c
-    web_box = Part.makeBox(thickness, web_y_max - web_y_min, gap_end_z - gap_start_z, App.Vector(0, web_y_min, gap_start_z))
-    
-    # Chop off anything that sticks out the back of the leg
-    outer_cyl_full = Part.makeCylinder(params.R_BACK, thickness, App.Vector(0, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
-    web_box = web_box.common(outer_cyl_full)
-    
-    # Scoop out the C-shape
-    cut_cyl = Part.makeCylinder(R, thickness + 2.0 * params.SCALE, App.Vector(-1.0 * params.SCALE, Y_c, Z_c), App.Vector(1, 0, 0))
-    c_fillet = web_box.cut(cut_cyl)
-    
-    leg_body = leg_body.fuse(c_fillet)
-
     # 6. Crossbar Mounting Bosses & 13mm M12 Clearance Bores
     # Boss 1: Front Base (Y=25, Z=15)
     cyl1 = Part.makeCylinder(bore_r, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, 25.0 * params.SCALE, 15.0 * params.SCALE), App.Vector(1, 0, 0))

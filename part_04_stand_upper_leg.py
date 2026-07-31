@@ -72,35 +72,7 @@ def construct_upper_leg():
 
     leg_body = leg_body.fuse(straight_arm).fuse(curved_tip).fuse(cap)
     
-    # 2a. Top Fillet for the Top Arm
-    gap_start_z = start_z + arm_thickness_z
-    R = 40.0 * params.SCALE
-    gap_end_z = gap_start_z + 2.0 * R
-    mid_z = gap_start_z + R
-    
-    # Front surface of the leg at mid_z
-    y_front_mid = params.get_leg_y_at_z(mid_z) + 9.9 * params.SCALE
-    Y_c = y_front_mid + R
-    Z_c = mid_z
-    
-    # Solid block filling the gap, extending deep enough to ensure fusion
-    web_y_min = -100.0 * params.SCALE
-    web_y_max = Y_c
-    web_box = Part.makeBox(thickness, web_y_max - web_y_min, gap_end_z - gap_start_z, App.Vector(0, web_y_min, gap_start_z))
-    
-    # Chop off anything that sticks out the back of the leg
-    outer_cyl_full = Part.makeCylinder(params.R_BACK, thickness, App.Vector(0, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
-    web_box = web_box.common(outer_cyl_full)
-    
-    # Scoop out the C-shape
-    cut_cyl = Part.makeCylinder(R, thickness + 2.0 * params.SCALE, App.Vector(-1.0 * params.SCALE, Y_c, Z_c), App.Vector(1, 0, 0))
-    c_fillet = web_box.cut(cut_cyl)
-    
-    # Chop off anything above the leg (Z=300)
-    bbox_top = Part.makeBox(thickness, 160.0 * params.SCALE, 300.0 * params.SCALE, App.Vector(0, -100.0 * params.SCALE, 0))
-    c_fillet = c_fillet.common(bbox_top)
-    
-    leg_body = leg_body.fuse(c_fillet)
+
 
     # 3. Top Crossbar Mounting Boss and Elastic U Cap
     cb_z = 280.0 * params.SCALE
