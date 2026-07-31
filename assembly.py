@@ -16,6 +16,7 @@ import part_01_crossbar
 import part_02_stand_lower_leg
 import part_03_stand_middle_leg
 import part_04_stand_upper_leg
+import part_05_threaded_pin
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPORT_BASE = os.path.join(CURRENT_DIR, "exports")
@@ -36,6 +37,7 @@ def build_assembly():
     shape_lower_leg  = part_02_stand_lower_leg.construct_lower_leg()
     shape_middle_leg = part_03_stand_middle_leg.construct_middle_leg()
     shape_upper_leg  = part_04_stand_upper_leg.construct_upper_leg()
+    shape_pin        = part_05_threaded_pin.construct_threaded_pin()
 
     # Dimensions
     frame_thick = params.FRAME_THICKNESS
@@ -81,7 +83,29 @@ def build_assembly():
     cb4.translate(App.Vector(frame_thick, cb4_y, 280.0 * params.SCALE))
     comp_items.append(cb4)
 
-    # 5. Compound Assembly Shape
+    # 5. Threaded Fasteners (Thumb Pins)
+    # Define the 4 crossbar center coordinates (Y, Z)
+    pin_coords = [
+        (25.0 * params.SCALE, 15.0 * params.SCALE),
+        (params.TOTAL_BASE_DEPTH - 25.0 * params.SCALE, 15.0 * params.SCALE),
+        (cb3_y, 155.0 * params.SCALE),
+        (cb4_y, 280.0 * params.SCALE)
+    ]
+
+    for y, z in pin_coords:
+        # Left side pin (points +X, head at X=0)
+        pin_l = shape_pin.copy()
+        pin_l.rotate(App.Vector(0, 0, 0), App.Vector(0, 1, 0), 90)
+        pin_l.translate(App.Vector(0, y, z))
+        comp_items.append(pin_l)
+
+        # Right side pin (points -X, head at X=right_x + frame_thick)
+        pin_r = shape_pin.copy()
+        pin_r.rotate(App.Vector(0, 0, 0), App.Vector(0, 1, 0), -90)
+        pin_r.translate(App.Vector(right_x + frame_thick, y, z))
+        comp_items.append(pin_r)
+
+    # 6. Compound Assembly Shape
     assembly_shape = Part.makeCompound(comp_items)
 
     # Export clean STEP and STL

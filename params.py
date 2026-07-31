@@ -15,7 +15,7 @@ TOTAL_STAND_WIDTH  = 320.0 * SCALE
 # --- Structural & Fit Parameters ---
 SCREW_THREAD_DIAMETER = 12.0 * SCALE   # M12 fat 3D-printable thumb screw
 THREAD_PITCH          = 2.5 * SCALE    # 2.5 mm coarse thread pitch
-SCREW_HEAD_DIAMETER   = 24.0 * SCALE   # 24 mm ergonomic knurled thumb head
+SCREW_HEAD_DIAMETER   = 16.0 * SCALE   # 16 mm simple rounded button head
 CROSSBAR_LENGTH       = 170.0 * SCALE  # 170 mm crossbar length (fits flat on 175 mm bed)
 CROSSBAR_DIAMETER     = 18.0 * SCALE   # 18 mm outer diameter (provides 3.0 mm wall around M12 thread)
 FRAME_THICKNESS       = 20.0 * SCALE   # 20 mm side frame panel thickness
@@ -27,6 +27,7 @@ FIT_CLEARANCE      = 0.4 * SCALE       # Sliding joints & mortise-and-tenon alig
 THREAD_CLEARANCE   = 0.6 * SCALE       # Radial/diametral clearance for 3D-printed threads
 PRESS_CLEARANCE    = 0.2 * SCALE       # Press/glue fit clearance
 DOVETAIL_CLEARANCE = 0.2 * SCALE       # Interlocking tray split dovetail clearance
+SIMPLIFIED_THREADS = False             # Set to True to skip generating heavy B-Rep threads (useful for assembly generation)
 
 # --- 3-Tier Removable Oval Bowl Dimensions ---
 TRAY_SMALL_LENGTH  = 225.0 * SCALE

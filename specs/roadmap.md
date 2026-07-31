@@ -37,7 +37,7 @@ Build, validate, and commit before moving to the next phase.
 
 ---
 
-## Phase 4 — Threaded Fasteners & Thumb Pins (`part_05_threaded_pin.py` — `freecad-threading`)
+## Phase 4 — Threaded Fasteners & Thumb Pins (`part_05_threaded_pin.py` — `freecad-threading`) ✅
 - **M12 × 2.5 mm coarse thread** thumb screw with 24 mm ergonomic knurled head
 - Used to lock side stand frames to crossbars through side panel bosses
 - Thread profile optimized for FDM printing with 60° self-supporting overhangs and 0.6 mm diametral thread clearance (`THREAD_CLEARANCE = 0.6 mm`)

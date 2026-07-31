@@ -34,7 +34,13 @@ def run_all():
     # 2. Rebuild full assembly
     if os.path.exists(os.path.join(CURRENT_DIR, "assembly.py")):
         print("--> Rebuilding full assembly...")
+        
         try:
+            import part_01_crossbar
+            import part_05_threaded_pin
+            importlib.reload(part_01_crossbar)
+            importlib.reload(part_05_threaded_pin)
+
             mod = importlib.import_module("assembly")
             importlib.reload(mod)
             if hasattr(mod, "main"):

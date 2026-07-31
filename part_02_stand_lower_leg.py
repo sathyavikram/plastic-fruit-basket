@@ -63,14 +63,14 @@ def construct_lower_leg():
 
     # 2. Sweeping Base Feet (Smooth organic flares to the floor)
     # The main rectangular bases to support the crossbars, hidden under the leg curves
-    foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 45.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, -10.0 * params.SCALE, 0))
-    foot_rear  = Part.makeBox(thickness + 6.0 * params.SCALE, 45.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 120.0 * params.SCALE, 0))
+    foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 45.0 * params.SCALE, 6.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, -10.0 * params.SCALE, 0))
+    foot_rear  = Part.makeBox(thickness + 6.0 * params.SCALE, 45.0 * params.SCALE, 6.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 120.0 * params.SCALE, 0))
     
     # Smooth the top of the feet with a gentle robust 2mm fillet BEFORE fusing flares
     def fillet_foot(solid_foot):
         edges = []
         for edge in solid_foot.Edges:
-            if abs(edge.BoundBox.ZMin - 8.0 * params.SCALE) < 0.1 and abs(edge.BoundBox.ZMax - 8.0 * params.SCALE) < 0.1:
+            if abs(edge.BoundBox.ZMin - 6.0 * params.SCALE) < 0.1 and abs(edge.BoundBox.ZMax - 6.0 * params.SCALE) < 0.1:
                 edges.append(edge)
         if edges:
             try:
@@ -87,8 +87,8 @@ def construct_lower_leg():
     flare_back_cyl = Part.makeCylinder(24.0 * params.SCALE, thickness + 6.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, -15.0 * params.SCALE, 24.0 * params.SCALE), App.Vector(1, 0, 0))
     flare_back = flare_back_box.cut(flare_back_cyl)
     
-    # Front Flare (sweeps from the hook tip at Y=164, Z=8 down to the floor at Y=184, Z=0)
-    flare_front_box = Part.makeBox(thickness + 6.0 * params.SCALE, 20.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 164.0 * params.SCALE, 0)) # Y from 164 to 184
+    # Front Flare (sweeps from the hook tip at Y=164, Z=6 down to the floor at Y=184, Z=0)
+    flare_front_box = Part.makeBox(thickness + 6.0 * params.SCALE, 20.0 * params.SCALE, 6.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 164.0 * params.SCALE, 0)) # Y from 164 to 184
     flare_front_cyl = Part.makeCylinder(29.0 * params.SCALE, thickness + 6.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 184.0 * params.SCALE, 29.0 * params.SCALE), App.Vector(1, 0, 0))
     flare_front = flare_front_box.cut(flare_front_cyl)
     

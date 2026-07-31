@@ -25,6 +25,8 @@ def create_female_thread_cutter(t_radius, t_pitch, depth):
     using the freecad-threading skill pattern.
     """
     t_r_inner = t_radius - (t_pitch * 0.45)
+    
+
     t_helix = Part.makeHelix(t_pitch, depth, t_r_inner, 0)
 
     # Female thread profile extending from inner radius to outer thread major radius
