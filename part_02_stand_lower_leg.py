@@ -40,6 +40,23 @@ def construct_lower_leg():
     # 2. Flared Base Feet at front (Y=10) and rear (Y=150)
     foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 5.0 * params.SCALE, 0))
     foot_rear  = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, depth - 35.0 * params.SCALE, 0))
+    
+    # Smooth the top of the feet with a 7.9mm fillet so they blend into the arm
+    def fillet_foot(solid_foot):
+        edges = []
+        for edge in solid_foot.Edges:
+            if abs(edge.BoundBox.ZMin - 8.0 * params.SCALE) < 0.1 and abs(edge.BoundBox.ZMax - 8.0 * params.SCALE) < 0.1:
+                edges.append(edge)
+        if edges:
+            try:
+                return solid_foot.makeFillet(7.9 * params.SCALE, edges)
+            except:
+                pass
+        return solid_foot
+
+    foot_front = fillet_foot(foot_front)
+    foot_rear = fillet_foot(foot_rear)
+    
     leg_body = base_bar.fuse(foot_front).fuse(foot_rear)
 
     # 3. Recessed screw pockets for feet (Z=0 to 1mm)
@@ -88,23 +105,31 @@ def construct_lower_leg():
 
     leg_body = leg_body.fuse(curved_tip).fuse(cap)
     
-    # 5a. Top Fillet for the Bottom Arm
-    top_fillet_r = 40.0 * params.SCALE
-    top_corner_z = start_z + arm_thickness_z
-    top_corner_y = params.get_leg_y_at_z(top_corner_z) + 9.9 * params.SCALE
-    t_fillet_box = Part.makeBox(thickness, top_fillet_r + 20.0 * params.SCALE, top_fillet_r, App.Vector(0, top_corner_y - 20.0 * params.SCALE, top_corner_z))
-    t_fillet_cyl = Part.makeCylinder(top_fillet_r, thickness, App.Vector(0, top_corner_y + top_fillet_r, top_corner_z + top_fillet_r), App.Vector(1, 0, 0))
-    top_fillet = t_fillet_box.cut(t_fillet_cyl)
+    # 5a. Massive C-Shaped Fillet filling the gap between Bottom Arm and Middle Arm (Z=25 to 125)
+    gap_start_z = 25.0 * params.SCALE
+    gap_end_z = 125.0 * params.SCALE
+    R = (gap_end_z - gap_start_z) / 2.0
+    mid_z = gap_start_z + R
     
-    # 5b. Bottom Fillet for the Bottom Arm
-    bot_fillet_r = 40.0 * params.SCALE
-    bot_corner_z = start_z
-    bot_corner_y = params.get_leg_y_at_z(bot_corner_z) + 9.9 * params.SCALE
-    b_fillet_box = Part.makeBox(thickness, bot_fillet_r + 20.0 * params.SCALE, bot_fillet_r, App.Vector(0, bot_corner_y - 20.0 * params.SCALE, bot_corner_z - bot_fillet_r))
-    b_fillet_cyl = Part.makeCylinder(bot_fillet_r, thickness, App.Vector(0, bot_corner_y + bot_fillet_r, bot_corner_z - bot_fillet_r), App.Vector(1, 0, 0))
-    bot_fillet = b_fillet_box.cut(b_fillet_cyl)
+    # Front surface of the leg at mid_z
+    y_front_mid = params.get_leg_y_at_z(mid_z) + 9.9 * params.SCALE
+    Y_c = y_front_mid + R
+    Z_c = mid_z
     
-    leg_body = leg_body.fuse(top_fillet).fuse(bot_fillet)
+    # Solid block filling the gap, extending deep enough to ensure fusion
+    web_y_min = -100.0 * params.SCALE
+    web_y_max = Y_c
+    web_box = Part.makeBox(thickness, web_y_max - web_y_min, gap_end_z - gap_start_z, App.Vector(0, web_y_min, gap_start_z))
+    
+    # Chop off anything that sticks out the back of the leg
+    outer_cyl_full = Part.makeCylinder(params.R_BACK, thickness, App.Vector(0, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
+    web_box = web_box.common(outer_cyl_full)
+    
+    # Scoop out the C-shape
+    cut_cyl = Part.makeCylinder(R, thickness + 2.0 * params.SCALE, App.Vector(-1.0 * params.SCALE, Y_c, Z_c), App.Vector(1, 0, 0))
+    c_fillet = web_box.cut(cut_cyl)
+    
+    leg_body = leg_body.fuse(c_fillet)
 
     # 6. Crossbar Mounting Bosses & 13mm M12 Clearance Bores
     # Boss 1: Front Base (Y=25, Z=15)
