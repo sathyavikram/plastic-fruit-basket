@@ -69,14 +69,16 @@ def build_assembly():
     cb2.translate(App.Vector(frame_thick, params.TOTAL_BASE_DEPTH - 25.0 * params.SCALE, 15.0 * params.SCALE))
     comp_items.append(cb2)
 
-    # Crossbar 3: Middle Tier (Y=60, Z=185)
+    # Crossbar 3: Middle Tier (just above medium arm, Z=155)
     cb3 = shape_crossbar.copy()
-    cb3.translate(App.Vector(frame_thick, 60.0 * params.SCALE, 185.0 * params.SCALE))
+    cb3_y = params.get_leg_y_at_z(155.0 * params.SCALE)
+    cb3.translate(App.Vector(frame_thick, cb3_y, 155.0 * params.SCALE))
     comp_items.append(cb3)
 
-    # Crossbar 4: Top Tier (Y=62, Z=320)
+    # Crossbar 4: Top Tier (just above small arm, Z=280)
     cb4 = shape_crossbar.copy()
-    cb4.translate(App.Vector(frame_thick, 62.0 * params.SCALE, 320.0 * params.SCALE))
+    cb4_y = params.get_leg_y_at_z(280.0 * params.SCALE)
+    cb4.translate(App.Vector(frame_thick, cb4_y, 280.0 * params.SCALE))
     comp_items.append(cb4)
 
     # 5. Compound Assembly Shape

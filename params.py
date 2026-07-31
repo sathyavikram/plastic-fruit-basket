@@ -56,3 +56,23 @@ if __name__ == "__main__":
     print(f"SCALE: {SCALE}")
     print(f"Target System Envelope: {TOTAL_STAND_HEIGHT}mm H x {TOTAL_BASE_DEPTH}mm D x {TOTAL_STAND_WIDTH}mm W")
     print(f"Build Plate Limits: {BUILD_PLATE_X} x {BUILD_PLATE_Y} x {BUILD_PLATE_Z} mm")
+
+import math
+
+# --- Curved Leg Geometry Helper ---
+# The vertical leg bows backwards (into negative Y) to make room for the bowls.
+# It forms an arc that passes through Y=40 at Z=25 (bottom) and Z=375 (top),
+# and bows back to Y=-20 at Z=200 (middle).
+C_Y = 265.2 * SCALE
+C_Z = 200.0 * SCALE
+R_FRONT = 285.2 * SCALE
+R_BACK = 325.2 * SCALE
+
+def get_leg_y_at_z(z_val):
+    """Returns the midpoint Y coordinate of the curved leg at a given Z height."""
+    dz = z_val - C_Z
+    if abs(dz) > R_FRONT:
+        return 0.0
+    y_front = C_Y - math.sqrt(R_FRONT**2 - dz**2)
+    y_back = C_Y - math.sqrt(R_BACK**2 - dz**2)
+    return (y_front + y_back) / 2.0

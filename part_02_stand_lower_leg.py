@@ -31,47 +31,58 @@ def construct_lower_leg():
     bore_r    = (params.SCREW_THREAD_DIAMETER / 2.0) + (0.5 * params.SCALE) # 6.5mm (13mm bore)
     boss_r    = (params.CROSSBAR_DIAMETER / 2.0) + (3.0 * params.SCALE)     # 12mm (24mm OD boss)
 
-    # 1. Main Base Bar (horizontal foot along Y-axis: Y=0 to 160mm, Z=0 to 25mm)
-    base_bar = Part.makeBox(thickness, depth, 25.0 * params.SCALE, App.Vector(0, 0, 0))
+    # 1. Main Base Bar (horizontal foot along Y-axis: Y=-20 to 160mm, Z=0 to 25mm)
+    base_bar = Part.makeBox(thickness, depth + 20.0 * params.SCALE, 25.0 * params.SCALE, App.Vector(0, -20.0 * params.SCALE, 0))
 
     # 2. Flared Base Feet at front (Y=10) and rear (Y=150)
     foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 5.0 * params.SCALE, 0))
     foot_rear  = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, depth - 35.0 * params.SCALE, 0))
-
     leg_body = base_bar.fuse(foot_front).fuse(foot_rear)
 
-    # 3. Recessed Rubber Pad Pockets (1.0mm deep, 15x15mm) on bottom face (Z=0)
+    # 3. Recessed screw pockets for feet (Z=0 to 1mm)
     pocket_front = Part.makeBox(15.0 * params.SCALE, 15.0 * params.SCALE, 1.0 * params.SCALE, App.Vector(2.5 * params.SCALE, 12.5 * params.SCALE, 0))
     pocket_rear  = Part.makeBox(15.0 * params.SCALE, 15.0 * params.SCALE, 1.0 * params.SCALE, App.Vector(2.5 * params.SCALE, depth - 27.5 * params.SCALE, 0))
     leg_body = leg_body.cut(pocket_front).cut(pocket_rear)
 
-    # 4. Vertical Riser Leg (curving up to Z=125mm)
-    riser = Part.makeBox(thickness, 40.0 * params.SCALE, height - 25.0 * params.SCALE, App.Vector(0, 30.0 * params.SCALE, 25.0 * params.SCALE))
+    # 4. Vertical Riser Leg - Curved backward
+    riser_height = height
+    
+    outer_cyl = Part.makeCylinder(params.R_BACK, thickness, App.Vector(0, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
+    inner_cyl = Part.makeCylinder(params.R_FRONT, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
+    curved_ring = outer_cyl.cut(inner_cyl)
+    
+    bbox = Part.makeBox(thickness + 4.0 * params.SCALE, 100.0 * params.SCALE, riser_height, App.Vector(-2.0 * params.SCALE, -80.0 * params.SCALE, 0.0))
+    riser = curved_ring.common(bbox)
+    
+    # Try adding fillets to the vertical edges of this slice
+    try:
+        r_edges = [e for e in riser.Edges if e.Length > (riser_height - 5.0 * params.SCALE)]
+        if r_edges:
+            riser = riser.makeFillet(2.0 * params.SCALE, r_edges)
+    except Exception:
+        pass
+        
     leg_body = leg_body.fuse(riser)
 
-    # Apply smooth 1.5mm chamfer to vertical wall edges
-    try:
-        c_edges = []
-        for edge in leg_body.Edges:
-            if isinstance(edge.Curve, Part.LineSegment):
-                p1, p2 = edge.Vertexes[0].Point, edge.Vertexes[-1].Point
-                # Select purely vertical riser edges parallel to Z axis
-                if abs(p1.x - p2.x) < 0.1 and abs(p1.y - p2.y) < 0.1 and abs(p1.z - p2.z) > 15.0 * params.SCALE and min(p1.z, p2.z) > 26.0 * params.SCALE and max(p1.z, p2.z) < (height - 2.0 * params.SCALE):
-                    c_edges.append(edge)
-        if c_edges:
-            leg_body = leg_body.makeChamfer(1.5 * params.SCALE, c_edges)
-    except Exception as e:
-        print(f"Notice: Lower leg chamfer fallback: {e}")
-
-    # 5. Forward-Upward Cradle Arm for Bottom Large Tray (TRAY_LARGE) with front retaining lip
-    cradle_base = Part.makeBox(thickness, 55.0 * params.SCALE, 16.0 * params.SCALE, App.Vector(0, 30.0 * params.SCALE, 75.0 * params.SCALE))
-    cradle_base.rotate(App.Vector(0, 30.0 * params.SCALE, 75.0 * params.SCALE), App.Vector(1, 0, 0), 25.0)
-
-    # Front retaining lip stop at front tip of cradle arm
-    lip = Part.makeBox(thickness, 14.0 * params.SCALE, 20.0 * params.SCALE, App.Vector(0, 75.0 * params.SCALE, 95.0 * params.SCALE))
+    # 5. Base Stand acts as Cradle Arm for Bottom Tray
+    bend_radius = 20.0 * params.SCALE
+    arm_thickness_z = 25.0 * params.SCALE
+    center_y = depth - 10.0 * params.SCALE
+    start_z = 25.0 * params.SCALE
     
-    cradle_arm = cradle_base.fuse(lip)
-    leg_body = leg_body.fuse(cradle_arm)
+    outer_r = bend_radius
+    outer_cyl = Part.makeCylinder(outer_r, thickness, App.Vector(0, center_y, start_z + outer_r), App.Vector(1, 0, 0))
+    
+    # Isolate the bottom-right quadrant of the cylinder
+    bbox = Part.makeBox(thickness + 4.0 * params.SCALE, outer_r + 5.0 * params.SCALE, outer_r, App.Vector(-2.0 * params.SCALE, center_y, start_z))
+    curved_tip = outer_cyl.common(bbox)
+
+    # Add a spherical or cylindrical cap to make the tip rounded
+    cap_radius = arm_thickness_z / 2.0
+    cap_y = center_y + outer_r - cap_radius
+    cap = Part.makeCylinder(cap_radius, thickness, App.Vector(0, cap_y, start_z + outer_r), App.Vector(1, 0, 0))
+
+    leg_body = leg_body.fuse(curved_tip).fuse(cap)
 
     # 6. Crossbar Mounting Bosses & 13mm M12 Clearance Bores
     # Boss 1: Front Base (Y=25, Z=15)
@@ -85,9 +96,11 @@ def construct_lower_leg():
     tenon_w = 8.0 * params.SCALE
     tenon_d = 12.0 * params.SCALE
     tenon_h = 10.0 * params.SCALE
+    
+    top_y = params.get_leg_y_at_z(height)
 
-    tenon1 = Part.makeBox(tenon_w, tenon_d, tenon_h, App.Vector(6.0 * params.SCALE, 35.0 * params.SCALE, height))
-    tenon2 = Part.makeBox(tenon_w, tenon_d, tenon_h, App.Vector(6.0 * params.SCALE, 55.0 * params.SCALE, height))
+    tenon1 = Part.makeBox(tenon_w, tenon_d, tenon_h, App.Vector(6.0 * params.SCALE, top_y - 10.0 * params.SCALE, height))
+    tenon2 = Part.makeBox(tenon_w, tenon_d, tenon_h, App.Vector(6.0 * params.SCALE, top_y + 10.0 * params.SCALE, height))
 
     leg_body = leg_body.fuse(tenon1).fuse(tenon2).removeSplitter()
 
