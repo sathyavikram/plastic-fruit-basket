@@ -51,25 +51,28 @@ def construct_lower_leg():
     except Exception:
         pass
 
-    # 2. Flared Base Feet at front (Y=10) and rear (Y=150)
-    foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 5.0 * params.SCALE, 0))
-    foot_rear  = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, depth - 35.0 * params.SCALE, 0))
-    
-    # Smooth the top of the feet with a 7.9mm fillet so they blend into the arm
-    def fillet_foot(solid_foot):
-        edges = []
-        for edge in solid_foot.Edges:
-            if abs(edge.BoundBox.ZMin - 8.0 * params.SCALE) < 0.1 and abs(edge.BoundBox.ZMax - 8.0 * params.SCALE) < 0.1:
-                edges.append(edge)
-        if edges:
-            try:
-                return solid_foot.makeFillet(7.9 * params.SCALE, edges)
-            except:
-                pass
-        return solid_foot
+    # Helper to create sweeping concave fillet webs
+    def make_web(r, w, x, y, z, dir_y, dir_z):
+        y_min = 0 if dir_y > 0 else -r
+        z_min = 0 if dir_z > 0 else -r
+        box = Part.makeBox(w, r, r, App.Vector(x, y + y_min, z + z_min))
+        cy = y + (r if dir_y > 0 else -r)
+        cz = z + (r if dir_z > 0 else -r)
+        cyl = Part.makeCylinder(r, w + 2.0 * params.SCALE, App.Vector(x - 1.0 * params.SCALE, cy, cz), App.Vector(1, 0, 0))
+        return box.cut(cyl)
 
-    foot_front = fillet_foot(foot_front)
-    foot_rear = fillet_foot(foot_rear)
+    # 2. Sweeping Base Feet
+    # Move rear foot back so it supports the curve (Y=2.53 at Z=8)
+    foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 44.3 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, -10.0 * params.SCALE, 0))
+    # Move front foot forward so it supports the hook (Y=164 at Z=8)
+    foot_rear  = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 145.0 * params.SCALE, 0))
+    
+    # Add sweeping webs to blend the leg into the feet!
+    web_back = make_web(12.0 * params.SCALE, thickness, 0, 2.53 * params.SCALE, 8.0 * params.SCALE, -1, 1)
+    web_front = make_web(12.0 * params.SCALE, thickness, 0, 164.0 * params.SCALE, 8.0 * params.SCALE, 1, 1)
+    
+    foot_front = foot_front.fuse(web_back)
+    foot_rear = foot_rear.fuse(web_front)
     
     leg_body = base_bar.fuse(foot_front).fuse(foot_rear)
 
@@ -96,39 +99,25 @@ def construct_lower_leg():
     except Exception:
         pass
         
-    leg_body = leg_body.fuse(riser)
-
-    # 5. Base Stand acts as Cradle Arm for Bottom Tray
-    bend_radius = 30.0 * params.SCALE
-    arm_thickness_z = 25.0 * params.SCALE
-    start_z = 0.0
-    center_z = start_z + bend_radius
+    # 5. Mathematically Perfect Upward Hook Tip
+    hook_center_z = 40.0 * params.SCALE
+    hook_r_out = 40.0 * params.SCALE
+    hook_r_in = 15.0 * params.SCALE
     
-    outer_cyl = Part.makeCylinder(bend_radius, thickness, App.Vector(0, center_y, center_z), App.Vector(1, 0, 0))
-    inner_cyl = Part.makeCylinder(bend_radius - arm_thickness_z, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, center_y, center_z), App.Vector(1, 0, 0))
+    outer_cyl = Part.makeCylinder(hook_r_out, thickness, App.Vector(0, center_y, hook_center_z), App.Vector(1, 0, 0))
+    inner_cyl = Part.makeCylinder(hook_r_in, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, center_y, hook_center_z), App.Vector(1, 0, 0))
     ring = outer_cyl.cut(inner_cyl)
     
-    # Isolate the bottom-right quadrant of the cylinder
-    bbox = Part.makeBox(thickness + 4.0 * params.SCALE, bend_radius + 5.0 * params.SCALE, bend_radius, App.Vector(-2.0 * params.SCALE, center_y, start_z))
+    # Bottom-right quadrant (Y: center_y to +50, Z: 0 to hook_center_z)
+    bbox = Part.makeBox(thickness + 4.0 * params.SCALE, hook_r_out + 10.0 * params.SCALE, hook_center_z, App.Vector(-2.0 * params.SCALE, center_y, 0))
     curved_tip = ring.common(bbox)
 
-    try:
-        ct_edges = []
-        for e in curved_tip.Edges:
-            if hasattr(e, "Vertexes") and len(e.Vertexes) >= 2:
-                if e.Length > 10.0 * params.SCALE:
-                    ct_edges.append(e)
-        if ct_edges:
-            curved_tip = curved_tip.makeFillet(2.0 * params.SCALE, ct_edges)
-    except Exception:
-        pass
+    # Cap the hook with a perfect half-cylinder
+    cap_radius = (hook_r_out - hook_r_in) / 2.0
+    cap_y = center_y + hook_r_in + cap_radius
+    cap = Part.makeCylinder(cap_radius, thickness, App.Vector(0, cap_y, hook_center_z), App.Vector(1, 0, 0))
 
-    # Add a spherical or cylindrical cap to make the tip rounded
-    cap_radius = arm_thickness_z / 2.0
-    cap_y = center_y + bend_radius - cap_radius
-    cap = Part.makeCylinder(cap_radius, thickness, App.Vector(0, cap_y, center_z), App.Vector(1, 0, 0))
-
-    leg_body = leg_body.fuse(curved_tip).fuse(cap)
+    leg_body = base_bar.fuse(foot_front).fuse(foot_rear).fuse(riser).fuse(curved_tip).fuse(cap).cut(pocket_front).cut(pocket_rear)
     
     # 6. Crossbar Mounting Bosses & 13mm M12 Clearance Bores
     # Boss 1: Front Base (Y=25, Z=15)
