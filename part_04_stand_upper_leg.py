@@ -47,7 +47,7 @@ def construct_upper_leg():
 
     # 2. Horizontal Cradle Arm for Small Tray with upward curved tip
     start_z = 250.0 * params.SCALE # Aligned exactly to start of leg
-    start_y = params.get_leg_y_at_z(start_z) - 10.0 * params.SCALE
+    start_y = params.get_leg_y_at_z(start_z) - 5.0 * params.SCALE
     center_y = 105.0 * params.SCALE # Shorter arm for top tier to stagger baskets
     length_straight = center_y - start_y
     bend_radius = 25.0 * params.SCALE
@@ -70,8 +70,25 @@ def construct_upper_leg():
     cap_y = center_y + bend_radius - cap_radius
     cap = Part.makeCylinder(cap_radius, thickness, App.Vector(0, cap_y, center_z), App.Vector(1, 0, 0))
 
-    cradle_arm = straight_arm.fuse(curved_tip).fuse(cap)
-    leg_body = leg_body.fuse(cradle_arm)
+    leg_body = leg_body.fuse(straight_arm).fuse(curved_tip).fuse(cap)
+    
+    # 2a. Top Fillet for the Top Arm
+    top_fillet_r = 40.0 * params.SCALE
+    top_corner_z = start_z + arm_thickness_z
+    top_corner_y = params.get_leg_y_at_z(top_corner_z) + 9.9 * params.SCALE
+    t_fillet_box = Part.makeBox(thickness, top_fillet_r + 20.0 * params.SCALE, top_fillet_r, App.Vector(0, top_corner_y - 20.0 * params.SCALE, top_corner_z))
+    t_fillet_cyl = Part.makeCylinder(top_fillet_r, thickness, App.Vector(0, top_corner_y + top_fillet_r, top_corner_z + top_fillet_r), App.Vector(1, 0, 0))
+    top_fillet = t_fillet_box.cut(t_fillet_cyl)
+    
+    # 2b. Bottom Fillet for the Top Arm
+    bot_fillet_r = 40.0 * params.SCALE
+    bot_corner_z = start_z
+    bot_corner_y = params.get_leg_y_at_z(bot_corner_z) + 9.9 * params.SCALE
+    b_fillet_box = Part.makeBox(thickness, bot_fillet_r + 20.0 * params.SCALE, bot_fillet_r, App.Vector(0, bot_corner_y - 20.0 * params.SCALE, bot_corner_z - bot_fillet_r))
+    b_fillet_cyl = Part.makeCylinder(bot_fillet_r, thickness, App.Vector(0, bot_corner_y + bot_fillet_r, bot_corner_z - bot_fillet_r), App.Vector(1, 0, 0))
+    bot_fillet = b_fillet_box.cut(b_fillet_cyl)
+    
+    leg_body = leg_body.fuse(top_fillet).fuse(bot_fillet)
 
     # 3. Top Crossbar Mounting Boss and Elastic U Cap
     cb_z = 280.0 * params.SCALE

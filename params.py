@@ -65,7 +65,7 @@ import math
 # and bows back to Y=-20 at Z=200 (middle).
 C_Y = 265.2 * SCALE
 C_Z = 200.0 * SCALE
-R_FRONT = 285.2 * SCALE
+R_FRONT = 305.2 * SCALE
 R_BACK = 325.2 * SCALE
 
 def get_leg_y_at_z(z_val):
