@@ -31,8 +31,11 @@ def construct_lower_leg():
     bore_r    = (params.SCREW_THREAD_DIAMETER / 2.0) + (0.5 * params.SCALE) # 6.5mm (13mm bore)
     boss_r    = (params.CROSSBAR_DIAMETER / 2.0) + (3.0 * params.SCALE)     # 12mm (24mm OD boss)
 
-    # 1. Main Base Bar (horizontal foot along Y-axis: Y=-20 to 160mm, Z=0 to 25mm)
-    base_bar = Part.makeBox(thickness, depth + 20.0 * params.SCALE, 25.0 * params.SCALE, App.Vector(0, -20.0 * params.SCALE, 0))
+    # 1. Main Base Bar (horizontal foot along Y-axis)
+    back_y = params.get_leg_y_at_z(0.0)
+    center_y = depth - 10.0 * params.SCALE
+    base_length = center_y - back_y
+    base_bar = Part.makeBox(thickness, base_length, 25.0 * params.SCALE, App.Vector(0, back_y, 0))
 
     # 2. Flared Base Feet at front (Y=10) and rear (Y=150)
     foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 5.0 * params.SCALE, 0))
@@ -51,7 +54,7 @@ def construct_lower_leg():
     inner_cyl = Part.makeCylinder(params.R_FRONT, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
     curved_ring = outer_cyl.cut(inner_cyl)
     
-    bbox = Part.makeBox(thickness + 4.0 * params.SCALE, 100.0 * params.SCALE, riser_height, App.Vector(-2.0 * params.SCALE, -80.0 * params.SCALE, 0.0))
+    bbox = Part.makeBox(thickness + 4.0 * params.SCALE, 160.0 * params.SCALE, riser_height, App.Vector(-2.0 * params.SCALE, -80.0 * params.SCALE, 0.0))
     riser = curved_ring.common(bbox)
     
     # Try adding fillets to the vertical edges of this slice
@@ -65,22 +68,23 @@ def construct_lower_leg():
     leg_body = leg_body.fuse(riser)
 
     # 5. Base Stand acts as Cradle Arm for Bottom Tray
-    bend_radius = 20.0 * params.SCALE
+    bend_radius = 30.0 * params.SCALE
     arm_thickness_z = 25.0 * params.SCALE
-    center_y = depth - 10.0 * params.SCALE
-    start_z = 25.0 * params.SCALE
+    start_z = 0.0
+    center_z = start_z + bend_radius
     
-    outer_r = bend_radius
-    outer_cyl = Part.makeCylinder(outer_r, thickness, App.Vector(0, center_y, start_z + outer_r), App.Vector(1, 0, 0))
+    outer_cyl = Part.makeCylinder(bend_radius, thickness, App.Vector(0, center_y, center_z), App.Vector(1, 0, 0))
+    inner_cyl = Part.makeCylinder(bend_radius - arm_thickness_z, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, center_y, center_z), App.Vector(1, 0, 0))
+    ring = outer_cyl.cut(inner_cyl)
     
     # Isolate the bottom-right quadrant of the cylinder
-    bbox = Part.makeBox(thickness + 4.0 * params.SCALE, outer_r + 5.0 * params.SCALE, outer_r, App.Vector(-2.0 * params.SCALE, center_y, start_z))
-    curved_tip = outer_cyl.common(bbox)
+    bbox = Part.makeBox(thickness + 4.0 * params.SCALE, bend_radius + 5.0 * params.SCALE, bend_radius, App.Vector(-2.0 * params.SCALE, center_y, start_z))
+    curved_tip = ring.common(bbox)
 
     # Add a spherical or cylindrical cap to make the tip rounded
     cap_radius = arm_thickness_z / 2.0
-    cap_y = center_y + outer_r - cap_radius
-    cap = Part.makeCylinder(cap_radius, thickness, App.Vector(0, cap_y, start_z + outer_r), App.Vector(1, 0, 0))
+    cap_y = center_y + bend_radius - cap_radius
+    cap = Part.makeCylinder(cap_radius, thickness, App.Vector(0, cap_y, center_z), App.Vector(1, 0, 0))
 
     leg_body = leg_body.fuse(curved_tip).fuse(cap)
 
