@@ -134,5 +134,4 @@ def main():
     feature.Shape = shape
     doc.recompute()
 
-if __name__ == "__main__":
-    main()
+main()
