@@ -82,11 +82,7 @@ def construct_threaded_pin():
     
     t_sweep = Part.Wire(t_helix).makePipeShell([t_wire], True, True)
     
-    # 5. Combine head, core, and thread
-    # Note: freecad-threading says to use makeCompound for overlapping geometry to avoid boolean hangs
-    thread_part = Part.makeCompound([head, core_shaft, t_sweep])
-    
-    # 6. Add thread tip chamfer (entry bevel) so it self-guides
+    # 5. Add thread tip chamfer (entry bevel) so it self-guides
     chamfer = Part.makeCone(
         t_radius + 2.0 * params.SCALE, t_r_inner,
         t_pitch / 2.0 + 1.0 * params.SCALE,
@@ -100,15 +96,12 @@ def construct_threaded_pin():
     # First cut the chamfer from the end cutter to make a chamfer cutter
     chamfer_cutter = end_cutter.cut(chamfer)
     
-    # Since thread_part is a compound, cutting it might be problematic. Let's fuse the shaft and sweep first if we need to cut.
-    # Actually, slicing slicers handle compounds perfectly, but if we cut a compound it might fail.
-    # Let's try to cut the compound directly.
-    try:
-        final_part = thread_part.cut(chamfer_cutter)
-    except:
-        # Fallback to fusing first
-        fused = head.fuse(core_shaft).fuse(t_sweep)
-        final_part = fused.cut(chamfer_cutter)
+    # Cut the core shaft and sweep individually to avoid OpenCASCADE boolean hangs
+    t_sweep_cut = t_sweep.cut(chamfer_cutter)
+    core_shaft_cut = core_shaft.cut(chamfer_cutter)
+    
+    # Finally, combine head, cut core, and cut thread into a compound
+    final_part = Part.makeCompound([head, core_shaft_cut, t_sweep_cut])
 
     # Re-orient body to lie along X-axis (rotate +Z to +X) to match crossbars, or leave as Z?
     # Usually pins are left on Z for printing (head on bed).
