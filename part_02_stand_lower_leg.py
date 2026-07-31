@@ -61,20 +61,39 @@ def construct_lower_leg():
         cyl = Part.makeCylinder(r, w + 2.0 * params.SCALE, App.Vector(x - 1.0 * params.SCALE, cy, cz), App.Vector(1, 0, 0))
         return box.cut(cyl)
 
-    # 2. Sweeping Base Feet
-    # Move rear foot back so it supports the curve (Y=2.53 at Z=8)
-    foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 44.3 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, -10.0 * params.SCALE, 0))
-    # Move front foot forward so it supports the hook (Y=164 at Z=8)
-    foot_rear  = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 145.0 * params.SCALE, 0))
+    # 2. Sweeping Base Feet (Smooth organic flares to the floor)
+    # The main rectangular bases to support the crossbars, hidden under the leg curves
+    foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 45.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, -10.0 * params.SCALE, 0))
+    foot_rear  = Part.makeBox(thickness + 6.0 * params.SCALE, 45.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 120.0 * params.SCALE, 0))
     
-    # Add sweeping webs to blend the leg into the feet!
-    web_back = make_web(12.0 * params.SCALE, thickness, 0, 2.53 * params.SCALE, 8.0 * params.SCALE, -1, 1)
-    web_front = make_web(12.0 * params.SCALE, thickness, 0, 164.0 * params.SCALE, 8.0 * params.SCALE, 1, 1)
+    # Smooth the top of the feet with a gentle robust 2mm fillet BEFORE fusing flares
+    def fillet_foot(solid_foot):
+        edges = []
+        for edge in solid_foot.Edges:
+            if abs(edge.BoundBox.ZMin - 8.0 * params.SCALE) < 0.1 and abs(edge.BoundBox.ZMax - 8.0 * params.SCALE) < 0.1:
+                edges.append(edge)
+        if edges:
+            try:
+                return solid_foot.makeFillet(2.0 * params.SCALE, edges)
+            except:
+                pass
+        return solid_foot
+
+    foot_front = fillet_foot(foot_front)
+    foot_rear = fillet_foot(foot_rear)
+
+    # Back Flare (sweeps from the riser at Z=19.6 down to the floor at Y=-15, Z=0)
+    flare_back_box = Part.makeBox(thickness + 6.0 * params.SCALE, 23.6 * params.SCALE, 20.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, -15.0 * params.SCALE, 0)) # Y from -15 to 8.6
+    flare_back_cyl = Part.makeCylinder(24.0 * params.SCALE, thickness + 6.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, -15.0 * params.SCALE, 24.0 * params.SCALE), App.Vector(1, 0, 0))
+    flare_back = flare_back_box.cut(flare_back_cyl)
     
-    foot_front = foot_front.fuse(web_back)
-    foot_rear = foot_rear.fuse(web_front)
+    # Front Flare (sweeps from the hook tip at Y=164, Z=8 down to the floor at Y=184, Z=0)
+    flare_front_box = Part.makeBox(thickness + 6.0 * params.SCALE, 20.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 164.0 * params.SCALE, 0)) # Y from 164 to 184
+    flare_front_cyl = Part.makeCylinder(29.0 * params.SCALE, thickness + 6.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 184.0 * params.SCALE, 29.0 * params.SCALE), App.Vector(1, 0, 0))
+    flare_front = flare_front_box.cut(flare_front_cyl)
     
-    leg_body = base_bar.fuse(foot_front).fuse(foot_rear)
+    # Combine the leg body with the flared feet
+    leg_body = base_bar.fuse(foot_front).fuse(flare_back).fuse(foot_rear).fuse(flare_front)
 
     # 3. Recessed screw pockets for feet (Z=0 to 1mm)
     pocket_front = Part.makeBox(15.0 * params.SCALE, 15.0 * params.SCALE, 1.0 * params.SCALE, App.Vector(2.5 * params.SCALE, 12.5 * params.SCALE, 0))
