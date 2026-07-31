@@ -56,6 +56,19 @@ def construct_middle_leg():
 
     straight_arm = Part.makeBox(thickness, length_straight, arm_thickness_z, App.Vector(0, start_y, start_z))
 
+    try:
+        a_edges = []
+        for e in straight_arm.Edges:
+            if hasattr(e, "Vertexes") and len(e.Vertexes) >= 2:
+                p1, p2 = e.Vertexes[0].Point, e.Vertexes[-1].Point
+                # Top edges are at Z = start_z + arm_thickness_z
+                if abs(p1.z - (start_z + arm_thickness_z)) < 0.1 and abs(p2.z - (start_z + arm_thickness_z)) < 0.1 and e.Length > 20.0 * params.SCALE:
+                    a_edges.append(e)
+        if a_edges:
+            straight_arm = straight_arm.makeFillet(2.0 * params.SCALE, a_edges)
+    except Exception:
+        pass
+
     # Curved upward tip using a quarter cylinder (pipe)
     center_z = start_z + bend_radius
     outer_cyl = Part.makeCylinder(bend_radius, thickness, App.Vector(0, center_y, center_z), App.Vector(1, 0, 0))
@@ -80,29 +93,25 @@ def construct_middle_leg():
     cyl = Part.makeCylinder(bore_r, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, cb_y, cb_z), App.Vector(1, 0, 0))
     leg_body = leg_body.cut(cyl)
 
-    # 4. Bottom Female Mortise Sockets at Z=125mm
+    # 4. Bottom Female Mortise Socket at Z=125mm
     clr = params.FIT_CLEARANCE
-    m_w = (8.0 * params.SCALE) + clr
-    m_d = (12.0 * params.SCALE) + clr
-    m_h = (10.0 * params.SCALE) + (0.5 * params.SCALE)
-
+    m_size = 10.0 * params.SCALE + clr
     bot_y = params.get_leg_y_at_z(h_start)
-    mortise1 = Part.makeBox(m_w, m_d, m_h, App.Vector(6.0 * params.SCALE - clr/2.0, bot_y - 10.0 * params.SCALE - clr/2.0, h_start - 0.1 * params.SCALE))
-    mortise2 = Part.makeBox(m_w, m_d, m_h, App.Vector(6.0 * params.SCALE - clr/2.0, bot_y + 10.0 * params.SCALE - clr/2.0, h_start - 0.1 * params.SCALE))
+    
+    mortise = Part.makeBox(m_size, m_size, m_size, 
+                           App.Vector((thickness - m_size) / 2.0, bot_y - (m_size / 2.0), h_start - 0.1 * params.SCALE))
 
-    leg_body = leg_body.cut(mortise1).cut(mortise2)
+    leg_body = leg_body.cut(mortise)
 
-    # 5. Top Male Tenon Alignment Pegs at Z=250mm for joining part_04
-    tenon_w = 8.0 * params.SCALE
-    tenon_d = 12.0 * params.SCALE
-    tenon_h = 10.0 * params.SCALE
-
+    # 5. Top Tenon Alignment Peg at Z=250mm
+    tenon_size = 10.0 * params.SCALE
     top_y = params.get_leg_y_at_z(h_end)
-    tenon1 = Part.makeBox(tenon_w, tenon_d, tenon_h, App.Vector(6.0 * params.SCALE, top_y - 10.0 * params.SCALE, h_end))
-    tenon2 = Part.makeBox(tenon_w, tenon_d, tenon_h, App.Vector(6.0 * params.SCALE, top_y + 10.0 * params.SCALE, h_end))
+    
+    tenon = Part.makeBox(tenon_size, tenon_size, tenon_size, 
+                         App.Vector((thickness - tenon_size) / 2.0, top_y - (tenon_size / 2.0), h_end))
 
 
-    leg_body = leg_body.fuse(tenon1).fuse(tenon2).removeSplitter()
+    leg_body = leg_body.fuse(tenon).removeSplitter()
 
     # 6. Apply smooth 1.5mm chamfer to vertical wall edges
     try:

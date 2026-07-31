@@ -54,6 +54,18 @@ def construct_upper_leg():
     arm_thickness_z = 16.0 * params.SCALE
 
     straight_arm = Part.makeBox(thickness, length_straight, arm_thickness_z, App.Vector(0, start_y, start_z))
+    try:
+        a_edges = []
+        for e in straight_arm.Edges:
+            if hasattr(e, "Vertexes") and len(e.Vertexes) >= 2:
+                p1, p2 = e.Vertexes[0].Point, e.Vertexes[-1].Point
+                # Top edges are at Z = start_z + arm_thickness_z
+                if abs(p1.z - (start_z + arm_thickness_z)) < 0.1 and abs(p2.z - (start_z + arm_thickness_z)) < 0.1 and e.Length > 20.0 * params.SCALE:
+                    a_edges.append(e)
+        if a_edges:
+            straight_arm = straight_arm.makeFillet(2.0 * params.SCALE, a_edges)
+    except Exception:
+        pass
 
     # Curved upward tip using a quarter cylinder (pipe)
     center_z = start_z + bend_radius
@@ -86,17 +98,15 @@ def construct_upper_leg():
     cyl = Part.makeCylinder(bore_r, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, cb_y, cb_z), App.Vector(1, 0, 0))
     leg_body = leg_body.cut(cyl)
 
-    # 4. Bottom Female Mortise Sockets at Z=250mm
-    bot_y = params.get_leg_y_at_z(h_start)
+    # 4. Bottom Female Mortise Socket at Z=250mm
     clr = params.FIT_CLEARANCE
-    m_w = (8.0 * params.SCALE) + clr
-    m_d = (12.0 * params.SCALE) + clr
-    m_h = (10.0 * params.SCALE) + (0.5 * params.SCALE)
+    m_size = 10.0 * params.SCALE + clr
+    bot_y = params.get_leg_y_at_z(start_z)
+    
+    mortise = Part.makeBox(m_size, m_size, m_size, 
+                           App.Vector((thickness - m_size) / 2.0, bot_y - (m_size / 2.0), start_z - 0.1 * params.SCALE))
 
-    mortise1 = Part.makeBox(m_w, m_d, m_h, App.Vector(6.0 * params.SCALE - clr/2.0, bot_y - 10.0 * params.SCALE - clr/2.0, h_start - 0.1 * params.SCALE))
-    mortise2 = Part.makeBox(m_w, m_d, m_h, App.Vector(6.0 * params.SCALE - clr/2.0, bot_y + 10.0 * params.SCALE - clr/2.0, h_start - 0.1 * params.SCALE))
-
-    leg_body = leg_body.cut(mortise1).cut(mortise2).removeSplitter()
+    leg_body = leg_body.cut(mortise).removeSplitter()
 
     # 5. Apply smooth 1.5mm chamfer to vertical wall edges
     try:

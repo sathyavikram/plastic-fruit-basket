@@ -38,6 +38,19 @@ def construct_lower_leg():
     outer_cyl_full_base = Part.makeCylinder(params.R_BACK, thickness, App.Vector(0, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
     base_bar = base_bar_raw.common(outer_cyl_full_base)
 
+    # Fillet the top edges of the base bar
+    try:
+        b_edges = []
+        for e in base_bar.Edges:
+            if hasattr(e, "Vertexes") and len(e.Vertexes) >= 2:
+                p1, p2 = e.Vertexes[0].Point, e.Vertexes[-1].Point
+                if abs(p1.z - 25.0 * params.SCALE) < 0.1 and abs(p2.z - 25.0 * params.SCALE) < 0.1 and e.Length > 20.0 * params.SCALE:
+                    b_edges.append(e)
+        if b_edges:
+            base_bar = base_bar.makeFillet(2.0 * params.SCALE, b_edges)
+    except Exception:
+        pass
+
     # 2. Flared Base Feet at front (Y=10) and rear (Y=150)
     foot_front = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, 5.0 * params.SCALE, 0))
     foot_rear  = Part.makeBox(thickness + 6.0 * params.SCALE, 30.0 * params.SCALE, 8.0 * params.SCALE, App.Vector(-3.0 * params.SCALE, depth - 35.0 * params.SCALE, 0))
@@ -99,6 +112,17 @@ def construct_lower_leg():
     bbox = Part.makeBox(thickness + 4.0 * params.SCALE, bend_radius + 5.0 * params.SCALE, bend_radius, App.Vector(-2.0 * params.SCALE, center_y, start_z))
     curved_tip = ring.common(bbox)
 
+    try:
+        ct_edges = []
+        for e in curved_tip.Edges:
+            if hasattr(e, "Vertexes") and len(e.Vertexes) >= 2:
+                if e.Length > 10.0 * params.SCALE:
+                    ct_edges.append(e)
+        if ct_edges:
+            curved_tip = curved_tip.makeFillet(2.0 * params.SCALE, ct_edges)
+    except Exception:
+        pass
+
     # Add a spherical or cylindrical cap to make the tip rounded
     cap_radius = arm_thickness_z / 2.0
     cap_y = center_y + bend_radius - cap_radius
@@ -114,31 +138,16 @@ def construct_lower_leg():
 
     leg_body = leg_body.cut(cyl1).cut(cyl2)
 
-    # 7. Top Tenon Alignment Pegs at Z=125mm for joining part_03
-    tenon_w = 8.0 * params.SCALE
-    tenon_d = 12.0 * params.SCALE
-    tenon_h = 10.0 * params.SCALE
+    # 7. Top Tenon Alignment Peg at Z=125mm for joining part_03
+    # Use a single, perfectly centered 10x10x10 tenon
+    tenon_size = 10.0 * params.SCALE
+    top_y = params.get_leg_y_at_z(height) # This is the exact center of the leg curve
     
-    top_y = params.get_leg_y_at_z(height)
+    # Place tenon centered at X=10 (thickness/2) and Y=top_y
+    tenon = Part.makeBox(tenon_size, tenon_size, tenon_size, 
+                         App.Vector((thickness - tenon_size) / 2.0, top_y - (tenon_size / 2.0), height))
 
-    tenon1 = Part.makeBox(tenon_w, tenon_d, tenon_h, App.Vector(6.0 * params.SCALE, top_y - 10.0 * params.SCALE, height))
-    tenon2 = Part.makeBox(tenon_w, tenon_d, tenon_h, App.Vector(6.0 * params.SCALE, top_y + 10.0 * params.SCALE, height))
-
-    leg_body = leg_body.fuse(tenon1).fuse(tenon2).removeSplitter()
-
-    # 8. Apply smooth 3.0mm fillets to outer side wall edges for an organic rounded profile
-    try:
-        fillet_edges = []
-        for edge in leg_body.Edges:
-            if hasattr(edge, "Vertexes") and len(edge.Vertexes) >= 2:
-                p1 = edge.Vertexes[0].Point
-                p2 = edge.Vertexes[-1].Point
-                if edge.Length > 4.0 * params.SCALE and p1.z > 1.0 * params.SCALE and p2.z > 1.0 * params.SCALE and p1.z < (height - 1.0 * params.SCALE) and p2.z < (height - 1.0 * params.SCALE):
-                    fillet_edges.append(edge)
-        if fillet_edges:
-            leg_body = leg_body.makeFillet(3.0 * params.SCALE, fillet_edges)
-    except Exception as e:
-        print(f"Notice: Lower leg wall fillet fallback: {e}")
+    leg_body = leg_body.fuse(tenon).removeSplitter()
 
     # Export clean STEP and STL
     os.makedirs(EXPORT_BASE, exist_ok=True)
