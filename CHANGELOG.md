@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2026-08-01
+- Implemented Phase 5 Small Top Oval Tray (`part_06_tray_small.py`) with a boat-like shape and a center split line incorporating two internal dovetail keys and alignment pins to fit the 175 mm bed limit.
 - Optimized assembly generation by using simplified thread placeholders to prevent FreeCAD OpenCASCADE from hanging during 3D tessellation.
 - Fixed a Python module import bug in `export_all.py` that was accidentally overwriting high-poly printable STLs with simplified visualization placeholders.
 

@@ -45,7 +45,7 @@ Build, validate, and commit before moving to the next phase.
 
 ---
 
-## Phase 5 — Small Top Oval Tray (`part_06_tray_small.py` — `freecad-fits-tolerances`)
+## Phase 5 — Small Top Oval Tray (`part_06_tray_small.py` — `freecad-fits-tolerances`) ✅
 - Small top oval tray (~225 mm width × 165 mm depth × 57 mm height)
 - Designed as a 2-piece split shell (Left Half & Right Half) joined along the center axis using internal dovetail keys and alignment pins to fit within 175 mm bed limits
 - Export STEP + STL for both halves; execute `freecad-visual-validation` pass
