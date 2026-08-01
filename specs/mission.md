@@ -20,8 +20,8 @@ All parts are:
 
 ### 2. Slatted Bar Basket Architecture (3 Tiers — All 3D Printed, Zero Split Seams)
 - **Modular Unified Slat-Tie Basket System**: Each tier is constructed from a modern slatted bar basket composed of 100% 3D-printable individual slat bars trapped inside blind sockets:
-  - **Center Straight Slats (`part_06_slat_straight.py`)**: Straight horizontal slat rods spanning across the stand width between left and right cradle arms. Key center slats serve as structural tie-bars featuring integrated M12 female thread sockets.
-  - **Left & Right Curved Side Slats (`part_07_slat_curved.py`)**: Slat bars that run straight across the center floor and curve smoothly upward at both ends to form the side retaining walls of the basket.
+  - **Center Straight Slats (`part_05_slat_straight.py`)**: Straight horizontal slat rods spanning across the stand width between left and right cradle arms. Key center slats serve as structural tie-bars featuring integrated M12 female thread sockets.
+  - **Left & Right Curved Side Slats (`part_06_slat_curved.py`)**: Slat bars that run straight across the center floor and curve smoothly upward at both ends to form the side retaining walls of the basket.
   - **Option B Captured Sandwich Sockets**: Deep 10.0 mm blind cylindrical sockets (`FIT_CLEARANCE = 0.4 mm`) cut into the *inside face* of each cradle arm. Tightening the M12 thumb screws into the threaded slat tie-bars clamps the stand frames together, permanently locking all slats in place with zero rattle, zero separate crossbars, and 100% smooth, continuous top cradle arm surfaces.
 
 ### 3. Side Support Frames & Cradle Arms (100% 3D Printed)
@@ -29,8 +29,8 @@ All parts are:
 - **Modular Split Frame Construction**: Total height of 375 mm exceeds the 175 mm build height limit; each side frame is split into 3 stackable interlocking sections (`Lower Leg` ~135 mm, `Middle Segment` ~135 mm, `Upper Segment` ~135 mm) connected via mortise-and-tenon and alignment peg joints.
 
 ### 4. Fasteners & Structural Tie-Bars (100% 3D Printed)
-- **Unified Slat Structural Tie-Rods**: Separate crossbars are completely eliminated! The key slat bars (`part_06_slat_straight.py` and `part_07_slat_curved.py`) serve as both the basket floor slats AND the structural crossbars connecting the left and right side frames.
-- **Large Fat Threaded Fasteners (Printed)**: **M12 × 2.5 mm coarse thread** thumb screws (`part_05_threaded_pin.py`) with a 24 mm ergonomic knurled head thread directly into the ends of the slat tie-bars through the side frame bosses.
+- **Unified Slat Structural Tie-Rods**: Separate crossbars are completely eliminated! The key slat bars (`part_05_slat_straight.py` and `part_06_slat_curved.py`) serve as both the basket floor slats AND the structural crossbars connecting the left and right side frames.
+- **Large Fat Threaded Fasteners (Printed)**: **M12 × 2.5 mm coarse thread** thumb screws (`part_04_threaded_pin.py`) with a 24 mm ergonomic knurled head thread directly into the ends of the slat tie-bars through the side frame bosses.
   - **Why M12 × 2.5 mm**: 12 mm shaft diameter provides high shear strength, and 2.5 mm pitch creates deep, self-supporting 60° thread teeth that print cleanly with a standard 0.4 mm nozzle without support structures or binding (0.6 mm diametral clearance).
 
 ### 5. Integrated Anti-Slip Base Feet (Single Component)

@@ -14,23 +14,24 @@ importlib.reload(params)
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPORT_BASE = os.path.join(CURRENT_DIR, "exports")
-EXPORT_STEP = os.path.join(EXPORT_BASE, "part_04_stand_upper_leg.step")
-EXPORT_STL  = os.path.join(EXPORT_BASE, "part_04_stand_upper_leg.stl")
+EXPORT_STEP = os.path.join(EXPORT_BASE, "part_02_stand_middle_leg.step")
+EXPORT_STL  = os.path.join(EXPORT_BASE, "part_02_stand_middle_leg.stl")
 
 
-def construct_upper_leg():
+def construct_middle_leg():
     """
-    Constructs part_04_stand_upper_leg (Z=250mm to Z=375mm).
-    Features female mortise sockets matching part_03 tenons, top crossbar mounting boss
-    (13mm M12 clearance bore), top cradle arms, and tapered crown termination.
+    Constructs part_03_stand_middle_leg (Z=125mm to Z=250mm).
+    Features female mortise sockets matching part_02 tenons, middle S-curve riser,
+    middle crossbar mounting boss (13mm M12 clearance bore), middle tray cradle arms,
+    and top male tenon alignment pegs.
     """
     thickness  = params.FRAME_THICKNESS       # 20mm
-    h_start    = 250.0 * params.SCALE
-    h_end      = 280.0 * params.SCALE
-    leg_height = h_end - h_start              # 30mm
+    h_start    = 125.0 * params.SCALE
+    h_end      = 250.0 * params.SCALE
+    leg_height = h_end - h_start              # 125mm
     bore_r     = (params.SCREW_THREAD_DIAMETER / 2.0) + (0.5 * params.SCALE) # 6.5mm (13mm bore)
 
-    # 1. Main Upper Riser Body - Curved backward
+    # 1. Main Middle Riser Body - Curved backward
     outer_cyl = Part.makeCylinder(params.R_BACK, thickness, App.Vector(0, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
     inner_cyl = Part.makeCylinder(params.R_FRONT, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
     curved_ring = outer_cyl.cut(inner_cyl)
@@ -45,15 +46,16 @@ def construct_upper_leg():
         pass
     leg_body = riser
 
-    # 2. Horizontal Cradle Arm for Small Tray with upward curved tip
-    start_z = 250.0 * params.SCALE # Aligned exactly to start of leg
+    # 2. Horizontal Cradle Arm for Medium Tray with upward curved tip
+    start_z = 125.0 * params.SCALE
     start_y = params.get_leg_y_at_z(start_z) - 5.0 * params.SCALE
-    center_y = 105.0 * params.SCALE # Shorter arm for top tier to stagger baskets
+    center_y = 125.0 * params.SCALE
     length_straight = center_y - start_y
     bend_radius = 25.0 * params.SCALE
     arm_thickness_z = 16.0 * params.SCALE
 
     straight_arm = Part.makeBox(thickness, length_straight, arm_thickness_z, App.Vector(0, start_y, start_z))
+
     try:
         a_edges = []
         for e in straight_arm.Edges:
@@ -82,64 +84,66 @@ def construct_upper_leg():
     cap_y = center_y + bend_radius - cap_radius
     cap = Part.makeCylinder(cap_radius, thickness, App.Vector(0, cap_y, center_z), App.Vector(1, 0, 0))
 
-    leg_body = leg_body.fuse(straight_arm).fuse(curved_tip).fuse(cap)
-    
+    cradle_arm = straight_arm.fuse(curved_tip).fuse(cap)
+    leg_body = leg_body.fuse(cradle_arm)
 
-
-    # 3. Top Crossbar Mounting Boss and Elastic U Cap
-    cb_z = 280.0 * params.SCALE
+    # 3. Middle Crossbar Mounting Boss (13mm M12 Clearance Bore) just above arm
+    cb_z = 155.0 * params.SCALE
     cb_y = params.get_leg_y_at_z(cb_z)
-    
-    # Cap the top with a smooth U-shape cylinder (radius 20 to match 40mm thickness)
-    top_cap = Part.makeCylinder(20.0 * params.SCALE, thickness, App.Vector(0, cb_y, cb_z), App.Vector(1, 0, 0))
-    leg_body = leg_body.fuse(top_cap)
-    
-    # Cut the bore for the crossbar screw
     cyl = Part.makeCylinder(bore_r, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, cb_y, cb_z), App.Vector(1, 0, 0))
     leg_body = leg_body.cut(cyl)
 
-    # 4. Option B Captured Sandwich Sockets for Slatted Bar Basket
-    # Cut 3 blind cylindrical sockets into the inner face (X=0) of upper cradle arm at Z=250mm
+    # 4. Bottom Female Mortise Socket at Z=125mm
+    clr = params.FIT_CLEARANCE
+    m_size = 10.0 * params.SCALE + clr
+    bot_y = params.get_leg_y_at_z(h_start)
+    
+    mortise = Part.makeBox(m_size, m_size, m_size, 
+                           App.Vector((thickness - m_size) / 2.0, bot_y - (m_size / 2.0), h_start - 0.1 * params.SCALE))
+
+    leg_body = leg_body.cut(mortise)
+
+    # 5. Option B Captured Sandwich Sockets for Slatted Bar Basket
+    # Cut 3 blind cylindrical sockets into the inner face (X=0) of middle cradle arm at Z=125mm
     socket_r = (params.SLAT_DIAMETER / 2.0) + (params.FIT_CLEARANCE / 2.0)
     socket_depth = 10.0 * params.SCALE
-    arm_z = 250.0 * params.SCALE
+    arm_z = 125.0 * params.SCALE
     center_z = arm_z + (params.SLAT_DIAMETER / 2.0)
-    for y_pos in (50.0 * params.SCALE, 70.0 * params.SCALE, 90.0 * params.SCALE):
+    for y_pos in (60.0 * params.SCALE, 85.0 * params.SCALE, 110.0 * params.SCALE):
         socket_cut = Part.makeCylinder(socket_r, socket_depth + 1.0 * params.SCALE,
                                        App.Vector(-0.5 * params.SCALE, y_pos, center_z), App.Vector(1, 0, 0))
         leg_body = leg_body.cut(socket_cut)
 
-    # 5. Bottom Female Mortise Socket at Z=250mm
-    clr = params.FIT_CLEARANCE
-    m_size = 10.0 * params.SCALE + clr
-    bot_y = params.get_leg_y_at_z(start_z)
+    # 6. Top Tenon Alignment Peg at Z=250mm
+    tenon_size = 10.0 * params.SCALE
+    top_y = params.get_leg_y_at_z(h_end)
     
-    mortise = Part.makeBox(m_size, m_size, m_size, 
-                           App.Vector((thickness - m_size) / 2.0, bot_y - (m_size / 2.0), start_z - 0.1 * params.SCALE))
+    tenon = Part.makeBox(tenon_size, tenon_size, tenon_size, 
+                         App.Vector((thickness - tenon_size) / 2.0, top_y - (tenon_size / 2.0), h_end))
 
-    leg_body = leg_body.cut(mortise).removeSplitter()
+    leg_body = leg_body.fuse(tenon).removeSplitter()
 
-    # 5. Apply smooth 1.5mm chamfer to vertical wall edges
+    # 6. Apply smooth 1.5mm chamfer to vertical wall edges
     try:
         c_edges = []
         for edge in leg_body.Edges:
             if isinstance(edge.Curve, Part.LineSegment):
                 p1, p2 = edge.Vertexes[0].Point, edge.Vertexes[-1].Point
-                if abs(p1.z - p2.z) > 10.0 * params.SCALE and p1.z > (h_start + 5.0 * params.SCALE) and p2.z > (h_start + 5.0 * params.SCALE):
+                if abs(p1.z - p2.z) > 10.0 * params.SCALE and p1.z > (h_start + 5.0 * params.SCALE) and p2.z > (h_start + 5.0 * params.SCALE) and p1.z < (h_end - 5.0 * params.SCALE) and p2.z < (h_end - 5.0 * params.SCALE):
                     c_edges.append(edge)
         if c_edges:
             leg_body = leg_body.makeChamfer(1.5 * params.SCALE, c_edges)
     except Exception as e:
-        print(f"Notice: Upper leg chamfer fallback: {e}")
+        print(f"Notice: Middle leg chamfer fallback: {e}")
 
     # Export clean STEP and STL
     return leg_body
 
 
 def main():
-    doc = App.newDocument("UpperLeg")
-    shape = construct_upper_leg()
-    feature = doc.addObject("Part::Feature", "UpperLeg")
+    doc = App.newDocument("MiddleLeg")
+    shape = construct_middle_leg()
+    feature = doc.addObject("Part::Feature", "MiddleLeg")
     feature.Shape = shape
     doc.recompute()
 

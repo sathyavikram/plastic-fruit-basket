@@ -37,8 +37,8 @@ def run_all():
         # Enable simplified threads just for the assembly to prevent hanging/OOM during tessellation
         os.environ["SIMPLIFIED_THREADS"] = "1"
         try:
-            import part_05_threaded_pin
-            importlib.reload(part_05_threaded_pin)
+            import part_04_threaded_pin
+            importlib.reload(part_04_threaded_pin)
 
             mod = importlib.import_module("assembly")
             importlib.reload(mod)

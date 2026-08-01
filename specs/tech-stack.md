@@ -80,12 +80,12 @@ The development workflow integrates the following **6 core installed skills** an
 plastic-fruit-basket/
 ├── specs/                           ← project constitution (mission.md, tech-stack.md, roadmap.md)
 ├── params.py                        ← all dimensions + SCALE + paths
-├── part_02_stand_lower_leg.py       ← lower leg with integrated base feet & inner face blind sockets
-├── part_03_stand_middle_leg.py      ← middle S-curve leg section with inner face blind sockets
-├── part_04_stand_upper_leg.py       ← upper leg section with inner face blind sockets
-├── part_05_threaded_pin.py          ← M12 x 2.5mm fat knurled thumb screw
-├── part_06_slat_straight.py         ← straight center floor slat bars & threaded tie-slats
-├── part_07_slat_curved.py           ← curved side retaining slat bars & threaded tie-slats
+├── part_01_stand_lower_leg.py       ← lower leg with integrated base feet & inner face blind sockets
+├── part_02_stand_middle_leg.py      ← middle S-curve leg section with inner face blind sockets
+├── part_03_stand_upper_leg.py       ← upper leg section with inner face blind sockets
+├── part_04_threaded_pin.py          ← M12 x 2.5mm fat knurled thumb screw
+├── part_05_slat_straight.py         ← straight center floor slat bars & threaded tie-slats
+├── part_06_slat_curved.py           ← curved side retaining slat bars & threaded tie-slats
 ├── assembly.py                      ← full 3D assembly script
 ├── export_all.py                    ← regenerates all STEP + STL exports
 ├── run.sh                           ← build & validation runner

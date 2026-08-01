@@ -14,8 +14,8 @@ importlib.reload(params)
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPORT_BASE = os.path.join(CURRENT_DIR, "exports")
-EXPORT_STEP = os.path.join(EXPORT_BASE, "part_02_stand_lower_leg.step")
-EXPORT_STL  = os.path.join(EXPORT_BASE, "part_02_stand_lower_leg.stl")
+EXPORT_STEP = os.path.join(EXPORT_BASE, "part_01_stand_lower_leg.step")
+EXPORT_STL  = os.path.join(EXPORT_BASE, "part_01_stand_lower_leg.stl")
 
 
 def construct_lower_leg():

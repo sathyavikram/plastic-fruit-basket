@@ -14,8 +14,8 @@ importlib.reload(params)
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPORT_BASE = os.path.join(CURRENT_DIR, "exports")
-EXPORT_STEP = os.path.join(EXPORT_BASE, "part_07_slat_curved.step")
-EXPORT_STL  = os.path.join(EXPORT_BASE, "part_07_slat_curved.stl")
+EXPORT_STEP = os.path.join(EXPORT_BASE, "part_06_slat_curved.step")
+EXPORT_STL  = os.path.join(EXPORT_BASE, "part_06_slat_curved.stl")
 
 
 def construct_curved_slat(is_threaded=False):

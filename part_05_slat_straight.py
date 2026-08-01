@@ -14,8 +14,8 @@ importlib.reload(params)
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPORT_BASE = os.path.join(CURRENT_DIR, "exports")
-EXPORT_STEP = os.path.join(EXPORT_BASE, "part_06_slat_straight.step")
-EXPORT_STL  = os.path.join(EXPORT_BASE, "part_06_slat_straight.stl")
+EXPORT_STEP = os.path.join(EXPORT_BASE, "part_05_slat_straight.step")
+EXPORT_STL  = os.path.join(EXPORT_BASE, "part_05_slat_straight.stl")
 
 
 def make_female_thread_socket(screw_dia, pitch, thread_len, wall_thick):

@@ -15,8 +15,8 @@ importlib.reload(params)
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPORT_BASE = os.path.join(CURRENT_DIR, "exports")
-EXPORT_STEP = os.path.join(EXPORT_BASE, "part_05_threaded_pin.step")
-EXPORT_STL  = os.path.join(EXPORT_BASE, "part_05_threaded_pin.stl")
+EXPORT_STEP = os.path.join(EXPORT_BASE, "part_04_threaded_pin.step")
+EXPORT_STL  = os.path.join(EXPORT_BASE, "part_04_threaded_pin.stl")
 
 def construct_threaded_pin():
     """

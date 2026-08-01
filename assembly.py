@@ -15,12 +15,12 @@ import params
 import importlib
 importlib.reload(params)
 
-import part_02_stand_lower_leg
-import part_03_stand_middle_leg
-import part_04_stand_upper_leg
-import part_05_threaded_pin
-import part_06_slat_straight
-import part_07_slat_curved
+import part_01_stand_lower_leg
+import part_02_stand_middle_leg
+import part_03_stand_upper_leg
+import part_04_threaded_pin
+import part_05_slat_straight
+import part_06_slat_curved
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 EXPORT_BASE = os.path.join(CURRENT_DIR, "exports")
@@ -37,14 +37,14 @@ def build_assembly():
     comp_items = []
 
     # 1. Generate Base Parts
-    shape_lower_leg  = part_02_stand_lower_leg.construct_lower_leg()
-    shape_middle_leg = part_03_stand_middle_leg.construct_middle_leg()
-    shape_upper_leg  = part_04_stand_upper_leg.construct_upper_leg()
-    shape_pin        = part_05_threaded_pin.construct_threaded_pin()
-    shape_slat_str   = part_06_slat_straight.construct_straight_slat(is_threaded=False)
-    shape_slat_str_t = part_06_slat_straight.construct_straight_slat(is_threaded=True)
-    shape_slat_crv   = part_07_slat_curved.construct_curved_slat(is_threaded=False)
-    shape_slat_crv_t = part_07_slat_curved.construct_curved_slat(is_threaded=True)
+    shape_lower_leg  = part_01_stand_lower_leg.construct_lower_leg()
+    shape_middle_leg = part_02_stand_middle_leg.construct_middle_leg()
+    shape_upper_leg  = part_03_stand_upper_leg.construct_upper_leg()
+    shape_pin        = part_04_threaded_pin.construct_threaded_pin()
+    shape_slat_str   = part_05_slat_straight.construct_straight_slat(is_threaded=False)
+    shape_slat_str_t = part_05_slat_straight.construct_straight_slat(is_threaded=True)
+    shape_slat_crv   = part_06_slat_curved.construct_curved_slat(is_threaded=False)
+    shape_slat_crv_t = part_06_slat_curved.construct_curved_slat(is_threaded=True)
 
     # Dimensions
     frame_thick = params.FRAME_THICKNESS
