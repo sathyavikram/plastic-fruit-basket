@@ -59,14 +59,15 @@ Build, validate, and commit before moving to the next phase.
 
 ---
 
-## Phase 7 — Cradle Arm Inner Blind Sockets & Slat Integration (`part_02_stand_lower_leg.py`, `part_03_stand_middle_leg.py`, `part_04_stand_upper_leg.py` — `freecad-fits-tolerances`) ✅
+## Phase 7 — Cradle Arm Inner Blind Sockets & Unified Slat-Tie Architecture (`part_02_stand_lower_leg.py`, `part_03_stand_middle_leg.py`, `part_04_stand_upper_leg.py`, `part_06_slat_straight.py`, `part_07_slat_curved.py` — `freecad-fits-tolerances`) ✅
 - Update side frame cradle arms with Option B 10.0 mm inner blind sockets (`FIT_CLEARANCE = 0.4 mm`) to receive center and curved side slat end pins
+- Eliminate separate 18 mm crossbars (`part_01_crossbar.py`) by adding integrated M12 female thread sockets to key slat bars, unifying basket floor slats and structural tie-rods into a single component
 - Verify 100% smooth top cradle arm surfaces and zero interference in captured sandwich assembly lock
 
 ---
 
 ## Phase 8 — Final Review & Full Assembly (`assembly.py`, `export_all.py` — `freecad-visual-validation` & `changelog-maintenance`) ✅
-- Position all components in `assembly.py` (6 Frame Leg Segments with Integrated Base Feet, 4 Crossbars, 8 Thumb Pins, Center Slats, Curved Side Slats)
+- Position all components in `assembly.py` (6 Frame Leg Segments with Integrated Base Feet, 8 Thumb Pins, Threaded Slat Tie-Bars, Center Slats, Curved Side Slats)
 - Execute `export_all.py` to regenerate all clean STEP + STL files in `exports/`
 - Generate full `assembly.step` and `assembly.stl` and perform final visual collision and manifold inspection using `freecad-visual-validation`
 - Append concise dated release notes to `CHANGELOG.md` via `changelog-maintenance`

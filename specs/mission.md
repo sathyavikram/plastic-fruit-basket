@@ -21,18 +21,18 @@ Based on reference images (`specs/reference-images/1.jpg`, `2.jpg`, `3.jpg`) and
 - **Total Stand Width**: ~320 mm (~12.6") — *governed by the Large Bottom Bowl envelope length and crossbar span*.
 
 ### 2. Removable Slatted Bar Baskets (3 Tiers — All 3D Printed, Zero Split Seams)
-- **Modular Slatted Basket Architecture**: Instead of large solid plastic bowls split down the middle, each tier is constructed from a modern slatted bar basket composed of 100% 3D-printable individual slat bars trapped inside blind sockets:
-  - **Center Straight Slats (`part_06_slat_straight.py`)**: Straight horizontal slat rods spanning across the stand width between left and right cradle arms.
+- **Modular Unified Slat-Tie Basket Architecture**: Instead of large solid plastic bowls split down the middle or separate thick crossbars, each tier is constructed from a modern slatted bar basket composed of 100% 3D-printable individual slat bars trapped inside blind sockets:
+  - **Center Straight Slats (`part_06_slat_straight.py`)**: Straight horizontal slat rods spanning across the stand width between left and right cradle arms. Key center slats serve as structural tie-bars featuring integrated M12 female thread sockets.
   - **Left & Right Curved Side Slats (`part_07_slat_curved.py`)**: Slat bars that run straight across the center floor and curve smoothly upward at both ends to form the side retaining walls of the basket.
-  - **Option B Captured Sandwich Sockets**: Deep 10.0 mm blind cylindrical sockets (`FIT_CLEARANCE = 0.4 mm`) cut into the *inside face* of each cradle arm. Tightening the 4 main M12 thumb screws clamps the stand frames together, permanently locking all slats in place with zero rattle and 100% smooth, continuous top cradle arm surfaces.
+  - **Option B Captured Sandwich Sockets**: Deep 10.0 mm blind cylindrical sockets (`FIT_CLEARANCE = 0.4 mm`) cut into the *inside face* of each cradle arm. Tightening the M12 thumb screws into the threaded slat tie-bars clamps the stand frames together, permanently locking all slats in place with zero rattle, zero separate crossbars, and 100% smooth, continuous top cradle arm surfaces.
 
 ### 3. Side Support Frames & Cradle Arms (100% 3D Printed)
-- **2 Side Frames (Left & Right — Printed)**: Organic, S-curved vertical side panels with 3 pairs of integrated forward-extending curved cradle arms that securely hold each tier of 3D-printed oval bowls.
+- **2 Side Frames (Left & Right — Printed)**: Organic, S-curved vertical side panels with 3 pairs of integrated forward-extending curved cradle arms that securely hold each tier of 3D-printed slatted baskets.
 - **Modular Split Frame Construction**: Total height of 375 mm exceeds the 175 mm build height limit; each side frame is split into 3 stackable interlocking sections (`Lower Leg` ~135 mm, `Middle Segment` ~135 mm, `Upper Segment` ~135 mm) connected via mortise-and-tenon and alignment peg joints.
 
-### 4. Crossbars & Fasteners (100% 3D Printed)
-- **4 Round Support Rods / Crossbars (Printed)**: Length 170 mm (fits flat on 175 mm bed), 18 mm outer diameter; connects left and right side frames (2 at the base for wide-stance stability, 2 along the vertical structure).
-- **Large Fat Threaded Fasteners (Printed)**: **M12 × 2.5 mm coarse thread** thumb screws with a 24 mm ergonomic knurled head.
+### 4. Fasteners & Structural Tie-Bars (100% 3D Printed)
+- **Unified Slat Structural Tie-Rods**: The 4 separate 18 mm crossbars are completely eliminated! The key slat bars (`part_06_slat_straight.py` and `part_07_slat_curved.py`) serve as both the basket floor slats AND the structural crossbars connecting the left and right side frames.
+- **Large Fat Threaded Fasteners (Printed)**: **M12 × 2.5 mm coarse thread** thumb screws (`part_05_threaded_pin.py`) with a 24 mm ergonomic knurled head thread directly into the ends of the slat tie-bars through the side frame bosses.
   - **Why M12 × 2.5 mm**: 12 mm shaft diameter provides high shear strength, and 2.5 mm pitch creates deep, self-supporting 60° thread teeth that print cleanly with a standard 0.4 mm nozzle without support structures or binding (0.6 mm diametral clearance).
 
 ### 5. Integrated Anti-Slip Base Feet (Single Component)
