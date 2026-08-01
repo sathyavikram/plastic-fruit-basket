@@ -17,7 +17,7 @@ def run_all():
     """
     print("=== Starting export_all.py ===")
     
-    # 1. Discover all part_*.py scripts in order
+    # Discover all part_*.py scripts in order
     part_files = sorted(glob.glob(os.path.join(CURRENT_DIR, "part_*.py")))
     
     for part_path in part_files:
@@ -31,15 +31,11 @@ def run_all():
         except Exception as e:
             print(f"Error running {mod_name}: {e}")
 
-    # 2. Rebuild full assembly
+    # Rebuild full assembly
     if os.path.exists(os.path.join(CURRENT_DIR, "assembly.py")):
         print("--> Rebuilding full assembly...")
-        # Enable simplified threads just for the assembly to prevent hanging/OOM during tessellation
         os.environ["SIMPLIFIED_THREADS"] = "1"
         try:
-            import part_04_threaded_pin
-            importlib.reload(part_04_threaded_pin)
-
             mod = importlib.import_module("assembly")
             importlib.reload(mod)
             if hasattr(mod, "main"):
@@ -53,6 +49,4 @@ def run_all():
 
 
 if __name__ == "__main__":
-    run_all()
-else:
     run_all()

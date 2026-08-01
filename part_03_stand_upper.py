@@ -1,0 +1,141 @@
+import FreeCAD as App
+import Part
+import os
+import sys
+
+try:
+    sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+except NameError:
+    pass
+
+import params
+import importlib
+importlib.reload(params)
+import dovetail
+importlib.reload(dovetail)
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+EXPORT_BASE = os.path.join(CURRENT_DIR, "exports")
+EXPORT_STEP = os.path.join(EXPORT_BASE, "part_03_stand_upper.step")
+EXPORT_STL  = os.path.join(EXPORT_BASE, "part_03_stand_upper.stl")
+
+
+def construct_upper_stand():
+    """
+    Constructs part_03_stand_upper (Z=250mm to Z=375mm).
+    Upper stand tier with bottom female mortise alignment socket, upper curved riser,
+    extended cradle arm with upward-curving tip, top-surface 60-degree dovetail slots,
+    and smooth crown termination cap.
+    """
+    thickness  = params.FRAME_THICKNESS       # 20mm
+    h_start    = 250.0 * params.SCALE
+    h_end      = 375.0 * params.SCALE
+    leg_height = h_end - h_start              # 125mm
+
+    # 1. Main Upper Riser Body
+    outer_cyl   = Part.makeCylinder(params.R_BACK, thickness, App.Vector(0, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
+    inner_cyl   = Part.makeCylinder(params.R_FRONT, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, params.C_Y, params.C_Z), App.Vector(1, 0, 0))
+    curved_ring = outer_cyl.cut(inner_cyl)
+    
+    bbox  = Part.makeBox(thickness + 4.0 * params.SCALE, 100.0 * params.SCALE, leg_height, App.Vector(-2.0 * params.SCALE, -80.0 * params.SCALE, h_start))
+    riser = curved_ring.common(bbox)
+    try:
+        r_edges = [e for e in riser.Edges if e.Length > (leg_height - 5.0 * params.SCALE)]
+        if r_edges:
+            riser = riser.makeFillet(2.0 * params.SCALE, r_edges)
+    except Exception:
+        pass
+    leg_body = riser
+
+    # 2. Extended Upward-Curving Cradle Arm
+    start_z         = 250.0 * params.SCALE
+    start_y         = params.get_leg_y_at_z(start_z) - 5.0 * params.SCALE
+    center_y        = 105.0 * params.SCALE
+    length_straight = center_y - start_y
+    bend_radius     = 25.0 * params.SCALE
+    arm_thickness_z = 16.0 * params.SCALE
+
+    straight_arm = Part.makeBox(thickness, length_straight, arm_thickness_z, App.Vector(0, start_y, start_z))
+    try:
+        a_edges = []
+        for e in straight_arm.Edges:
+            if hasattr(e, "Vertexes") and len(e.Vertexes) >= 2:
+                p1, p2 = e.Vertexes[0].Point, e.Vertexes[-1].Point
+                if abs(p1.z - (start_z + arm_thickness_z)) < 0.1 and abs(p2.z - (start_z + arm_thickness_z)) < 0.1 and e.Length > 20.0 * params.SCALE:
+                    a_edges.append(e)
+        if a_edges:
+            straight_arm = straight_arm.makeFillet(2.0 * params.SCALE, a_edges)
+    except Exception:
+        pass
+
+    center_z   = start_z + bend_radius
+    outer_cyl  = Part.makeCylinder(bend_radius, thickness, App.Vector(0, center_y, center_z), App.Vector(1, 0, 0))
+    inner_cyl  = Part.makeCylinder(bend_radius - arm_thickness_z, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, center_y, center_z), App.Vector(1, 0, 0))
+    ring       = outer_cyl.cut(inner_cyl)
+    
+    bbox_tip   = Part.makeBox(thickness + 4.0 * params.SCALE, bend_radius + 5.0 * params.SCALE, bend_radius, App.Vector(-2.0 * params.SCALE, center_y, start_z))
+    curved_tip = ring.common(bbox_tip)
+
+    cap_radius = arm_thickness_z / 2.0
+    cap_y      = center_y + bend_radius - cap_radius
+    cap        = Part.makeCylinder(cap_radius, thickness, App.Vector(0, cap_y, center_z), App.Vector(1, 0, 0))
+
+    cradle_arm = straight_arm.fuse(curved_tip).fuse(cap)
+    leg_body   = leg_body.fuse(cradle_arm)
+
+    # 3. Crown Termination Cap at Top
+    cb_z    = 360.0 * params.SCALE
+    cb_y    = params.get_leg_y_at_z(cb_z)
+    top_cap = Part.makeCylinder(15.0 * params.SCALE, thickness, App.Vector(0, cb_y, cb_z), App.Vector(1, 0, 0))
+    leg_body = leg_body.fuse(top_cap)
+
+    # 4. Top-Surface Dovetail Slots on Cradle Arm
+    slot_tool = dovetail.make_top_dovetail_slot()
+    arm_top_z = start_z + arm_thickness_z
+    for y_pos in (50.0 * params.SCALE, 70.0 * params.SCALE, 90.0 * params.SCALE):
+        slot = slot_tool.copy()
+        slot.translate(App.Vector(0, y_pos, arm_top_z))
+        leg_body = leg_body.cut(slot)
+
+    # 5. Bottom Female Mortise Socket at Z=250mm
+    clr    = params.FIT_CLEARANCE
+    m_size = 10.0 * params.SCALE + clr
+    bot_y  = params.get_leg_y_at_z(start_z)
+    
+    mortise = Part.makeBox(m_size, m_size, m_size, 
+                           App.Vector((thickness - m_size) / 2.0, bot_y - (m_size / 2.0), start_z - 0.1 * params.SCALE))
+
+    leg_body = leg_body.cut(mortise).removeSplitter()
+
+    try:
+        c_edges = []
+        for edge in leg_body.Edges:
+            if isinstance(edge.Curve, Part.LineSegment):
+                p1, p2 = edge.Vertexes[0].Point, edge.Vertexes[-1].Point
+                if abs(p1.z - p2.z) > 10.0 * params.SCALE and p1.z > (h_start + 5.0 * params.SCALE):
+                    c_edges.append(edge)
+        if c_edges:
+            leg_body = leg_body.makeChamfer(1.5 * params.SCALE, c_edges)
+    except Exception:
+        pass
+
+    return leg_body
+
+
+def main():
+    doc = App.newDocument("UpperStand")
+    shape = construct_upper_stand()
+    feature = doc.addObject("Part::Feature", "UpperStand")
+    feature.Shape = shape
+    doc.recompute()
+
+    os.makedirs(EXPORT_BASE, exist_ok=True)
+    for path in (EXPORT_STEP, EXPORT_STL):
+        if os.path.exists(path):
+            os.remove(path)
+    shape.exportStep(EXPORT_STEP)
+    shape.exportStl(EXPORT_STL)
+    print(f"Exported to {EXPORT_STEP} and {EXPORT_STL}")
+
+if __name__ == "__main__" or sys.argv[-1] == os.path.basename(__file__):
+    main()

@@ -4,45 +4,48 @@
 
 Design a complete, commercially sellable **100% FDM 3D-Printable 3-Tier Countertop Slatted Fruit Basket** — a modern, slatted-bar kitchen organizer constructed entirely from 3D-printable plastic parts.
 
-**Crucial Mandate**: **Both the side support frames AND all 3 slatted baskets are 100% 3D printable.** No external ceramic/porcelain bowls, wood/bamboo panels, metal hardware, or separate crossbars are used. The entire product — frame legs, slat bars, and thumb screws — is produced via 3D printing.
+**Crucial Mandate**: **Both the side support frames AND all 3 slatted baskets are 100% 3D printable.** No external ceramic/porcelain bowls, wood/bamboo panels, metal hardware, or separate crossbars are used. The entire product — frame legs, stackable stand segments, and slat bars — is produced via 3D printing.
 
 All parts are:
 - **100% 3D Printable Modular Slatted Architecture**: Every component is designed to be printed on standard FDM 3D printers with a 175 × 175 × 175 mm build volume.
-- **100% Toolless / All-Plastic Assembly**: Uses 3D-printable M12 threaded thumb screws that thread directly into structural slat tie-bars through the side frame bosses.
-- **Sellable & Functional**: Features clean manifold geometry, filleted touch points, organic curved side ladder frames with cradle arms containing Option B inner face blind sockets, and integrated anti-slip foot pads.
+- **100% Toolless / All-Plastic Assembly**: Uses a 100% 3D-printable drop-in Dovetail Joint architecture to connect horizontal slats to vertical side frames. No screws, glue, or hardware required!
+- **Sellable & Functional**: Features clean manifold geometry, filleted touch points, organic curved side ladder frames with integrated cradle arms containing flush dovetail slots on their top surface, and integrated anti-slip foot pads.
 
 ## Reference Product Specifications & 3D Printing Strategy
 
-### 1. Overall System Dimensions
+### Overall System Dimensions
 - **Total Stand Height**: 375 mm (~14.8")
 - **Total Base Depth**: 160 mm (~6.3")
 - **Total Stand Width**: ~320 mm (~12.6") — *governed by the basket envelope length and slat span*.
 
-### 2. Slatted Bar Basket Architecture (3 Tiers — All 3D Printed, Zero Split Seams)
-- **Modular Unified Slat-Tie Basket System**: Each tier is constructed from a modern slatted bar basket composed of 100% 3D-printable individual slat bars trapped inside blind sockets:
-  - **Center Straight Slats (`part_05_slat_straight.py`)**: Straight horizontal slat rods spanning across the stand width between left and right cradle arms. Key center slats serve as structural tie-bars featuring integrated M12 female thread sockets.
-  - **Left & Right Curved Side Slats (`part_06_slat_curved.py`)**: Slat bars that run straight across the center floor and curve smoothly upward at both ends to form the side retaining walls of the basket.
-  - **Option B Captured Sandwich Sockets**: Deep 10.0 mm blind cylindrical sockets (`FIT_CLEARANCE = 0.4 mm`) cut into the *inside face* of each cradle arm. Tightening the M12 thumb screws into the threaded slat tie-bars clamps the stand frames together, permanently locking all slats in place with zero rattle, zero separate crossbars, and 100% smooth, continuous top cradle arm surfaces.
+### 1. Stands Design (100% 3D Printed Stackable Architecture)
+- **Stackable Stand Tiers (Lower, Middle, Upper Stands)**: The stand architecture is split vertically into 3 stackable tiers designed to stack directly on top of each other using interlocking mortise-and-tenon and alignment peg joints:
+  - **Lower Stand** (~135 mm): Base tier with integrated flared anti-slip feet.
+  - **Middle Stand** (~135 mm): Center tier stacked on top of the Lower Stand.
+  - **Upper Stand** (~135 mm): Top tier stacked on top of the Middle Stand.
+- **Left and Right Stand Structure**: Each tier consists of a left stand frame and a right stand frame.
+- **Extended Upward-Curving Cradle Arms**: Each stand frame features forward-extending cradle arms whose ends are curved and lift upwards continuously until they form the complete bowl side walls when the slats are fitted.
+- **Multiple Snap-Fit Dovetail Slots on Stand Arm Top Surfaces**: Multiple precision 60-degree dovetail slots (0.2 mm clearance) are integrated directly into the *top surface* of each stand frame's cradle arms (`Lower Stand`, `Middle Stand`, `Upper Stand`) so that the slats snap fit securely into the top surface along the arm profile.
 
-### 3. Side Support Frames & Cradle Arms (100% 3D Printed)
-- **2 Side Frames (Left & Right — Printed)**: Organic, S-curved vertical side panels with 3 pairs of integrated forward-extending curved cradle arms that securely hold each tier of slatted baskets.
-- **Modular Split Frame Construction**: Total height of 375 mm exceeds the 175 mm build height limit; each side frame is split into 3 stackable interlocking sections (`Lower Leg` ~135 mm, `Middle Segment` ~135 mm, `Upper Segment` ~135 mm) connected via mortise-and-tenon and alignment peg joints.
+### 2. Slat Design (3 Slat Types for Curved Bowl Effect)
+- **Modular Slat-Tie Basket System**: Each tier forms a curved slatted basket/bowl using 100% 3D-printable slat bars with dovetail pegs on their ends:
+  - **Middle Slats**: Straight central slat rods with dovetail pegs on both ends that span across the width, directly connecting the left stand and right stand together.
+  - **Left Curved Slats**: Curved boundary slat rods featuring dovetail pegs on their ends attached to the left stand, curving upwards/outwards to form the left side of the curved bowl.
+  - **Right Curved Slats**: Curved boundary slat rods featuring dovetail pegs on their ends attached to the right stand, curving upwards/outwards to form the right side of the curved bowl.
+  - **Curved Bowl Effect**: Combining the central connecting middle slats with the upward-sloping left and right curved slats creates a modern curved fruit bowl profile on each tier.
+- **Rounded-Rectangle Slat Profile**: Slat bars feature a rounded-rectangle / stadium cross-section with flat top and bottom faces and generous filleted edge radii (~1.5–2.5 mm). This provides zero-support flat FDM 3D printing, soft bruise-free fruit care, and rigid anti-twist indexing in the dovetail slots.
+- **Structural Tie-Bars (Zero Fasteners)**: The key slat bars serve as both the basket floor slats AND the structural crossbars connecting the left and right stand frames via through-dovetail joints on the stand top surface with zero screws, glue, or external hardware.
 
-### 4. Fasteners & Structural Tie-Bars (100% 3D Printed)
-- **Unified Slat Structural Tie-Rods**: Separate crossbars are completely eliminated! The key slat bars (`part_05_slat_straight.py` and `part_06_slat_curved.py`) serve as both the basket floor slats AND the structural crossbars connecting the left and right side frames.
-- **Large Fat Threaded Fasteners (Printed)**: **M12 × 2.5 mm coarse thread** thumb screws (`part_04_threaded_pin.py`) with a 24 mm ergonomic knurled head thread directly into the ends of the slat tie-bars through the side frame bosses.
-  - **Why M12 × 2.5 mm**: 12 mm shaft diameter provides high shear strength, and 2.5 mm pitch creates deep, self-supporting 60° thread teeth that print cleanly with a standard 0.4 mm nozzle without support structures or binding (0.6 mm diametral clearance).
-
-### 5. Integrated Anti-Slip Base Feet (Single Component)
-- **Integrated Base Feet**: Flared, wide-stance foot pads are integrated directly into the bottom of the lower stand legs (`Lower Leg`) as single monolithic 3D-printed parts.
+### 3. Anti-Slip Base Feet (Single Component)
+- **Integrated Base Feet**: Flared, wide-stance foot pads are integrated directly into the bottom of the lower stand legs (`Lower Stand`) as single monolithic 3D-printed parts.
 - **Surface Feature**: Bottom face of each leg foot features a chamfered contact rim and a recessed pocket for optional adhesive rubber/silicone bumper pads.
 
-## Parametric Scaling Architecture (`SCALE`)
+## Parametric Scaling Architecture
 
-The model is 100% parametrically driven by a global `SCALE` variable defined in `params.py`:
-- `SCALE = 1.0` (default target: 375 mm H, 160 mm D, 320 mm W).
-- Changing `SCALE` (e.g., `0.8`, `1.0`, `1.2`) automatically scales all part dimensions — slat spans, frame section heights, screw sizes, thread pitches, and dovetail keys — proportionally in a single update.
-- Fit tolerances (`FIT_CLEARANCE = 0.4 mm`, `THREAD_CLEARANCE = 0.6 mm`) remain calibrated so mating parts fit cleanly regardless of the selected `SCALE`.
+The model is 100% parametrically driven by a global scale multiplier:
+- Default 1.0 scale (target: 375 mm H, 160 mm D, 320 mm W).
+- Changing the scale factor (e.g., 0.8, 1.0, 1.2) automatically scales all part dimensions proportionally in a single update.
+- Fit tolerances (0.4 mm sliding clearance, 0.2 mm dovetail clearance) remain calibrated so mating parts fit cleanly regardless of the selected scale.
 
 ## Target Customer
 
@@ -50,11 +53,11 @@ Makers, 3D printing enthusiasts, and home organizers looking for a sleek, modula
 
 ## Success Criteria
 
-- **Complete 3D Printability**: Both the frame structure (legs, fasteners) AND all 3 slatted baskets are 100% 3D printed with zero non-printable parts.
-- **Parametric Scalability**: Modifying `SCALE` in `params.py` resizes all components, slats, and screws (M12) in total geometric alignment.
-- **Bed Volume Compliance**: Every individual part fits within the 175 × 175 × 175 mm FDM build volume at `SCALE = 1.0`.
+- **Complete 3D Printability**: Both the frame structure (legs) AND all 3 slatted baskets are 100% 3D printed with zero non-printable parts.
+- **Parametric Scalability**: Modifying the scale factor resizes all components in total geometric alignment.
+- **Bed Volume Compliance**: Every individual part fits within the 175 × 175 × 175 mm FDM build volume at the default 1.0 scale.
 - **Manifold Topology**: All exported STL files pass 100% manifold validation with zero non-manifold edges or self-intersections.
-- **Dimensional Fidelity**: Assembled model matches target canonical reference dimensions (375 mm H, 160 mm D, 320 mm W at `SCALE = 1.0`) within ±1.0 mm.
-- **Python Execution & Error Handling**: All Python scripts (`params.py`, `part_*.py`, `assembly.py`) execute cleanly headlessly via FreeCAD MCP Server with zero syntax errors, zero tracebacks, and zero OpenCASCADE CAD kernel boolean failures.
-- **Visual & Interference Validation**: All parts and full assembly pass multi-view rendering (`render_freecad_script`), exploded dimension check (`inspect_freecad_assembly`), section cut inspection (`section_freecad_model`), and 0.0 mm³ interference clearance validation (`check_interference`) via FreeCAD MCP Server.
+- **Dimensional Fidelity**: Assembled model matches target canonical reference dimensions (375 mm H, 160 mm D, 320 mm W at the default 1.0 scale) within ±1.0 mm.
+- **Automated CAD Generation**: The CAD models and assemblies can be generated cleanly from source without manual GUI intervention or boolean failures.
+- **Visual & Interference Validation**: All parts and full assembly pass multi-view rendering, exploded dimension checks, section cut inspections, and 0.0 mm³ interference clearance validation.
 - **CAD Deliverables**: Parametric STEP (AP214) and binary STL files generated for all individual parts and full assembly.

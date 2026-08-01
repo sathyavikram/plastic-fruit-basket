@@ -17,8 +17,8 @@
 The development workflow integrates the following **6 core installed skills** and the **FreeCAD MCP Server** (`freecad` toolset):
 
 1. **`freecad-project`**: Standardizes project layout, `params.py` single source of truth, `part_NN_name.py` design, `assembly.py`, `export_all.py`, `run.sh` runner, and print orientations.
-2. **`freecad-fits-tolerances`**: Defines clearances for sliding joints (`0.4 mm`), press/glue fits (`0.2 mm`), interlocking dovetail keys, and Option B inner face blind sockets (`10.0 mm` depth).
-3. **`freecad-threading`**: Governs 3D-printable M12 × 2.5 mm male and female threads via `Part.makeHelix` and `makePipeShell` with `THREAD_CLEARANCE = 0.6 mm` subtracted from male outer radii.
+2. **`freecad-fits-tolerances`**: Defines clearances for sliding joints (`0.4 mm`), interlocking dovetail keys & slots (`0.2 mm`), and mortise-and-tenon alignment joints (`0.4 mm`).
+3. **`freecad-threading`**: Governs 3D-printable male and female threaded features via `Part.makeHelix` and `makePipeShell` with `THREAD_CLEARANCE = 0.6 mm` subtracted from male outer radii.
 4. **`freecad-visual-validation`**: Mandates headless Python execution, runtime error catching, and validation using the **FreeCAD MCP Server** tools:
    - **Script Execution & Error Debugging**: Executes FreeCAD Python scripts (`part_*.py`, `assembly.py`), catching Python syntax errors, tracebacks, OpenCASCADE boolean failures, unhandled exceptions, and missing export files.
    - **`render_freecad_script`**: Multi-view bursts (`Isometric`, `Front`, `Top`, `Right`), camera zoom/angle controls, shape metadata (centroids, volumes, face counts), touching pairs, and joint verification.
@@ -44,25 +44,21 @@ The development workflow integrates the following **6 core installed skills** an
 | Default nozzle | 0.4 mm |
 | Layer height | 0.2 mm |
 | Sliding fit tolerance | 0.4 mm (`FIT_CLEARANCE`) |
-| Thread clearance | 0.6 mm (`THREAD_CLEARANCE`) |
+| Dovetail clearance | 0.2 mm (`DOVETAIL_CLEARANCE`) |
 | Press fit tolerance | 0.2 mm |
 | Min structural wall | 3.5 mm (4 perimeter loops) |
 | Overhang limit | ≤ 45° without support |
 
 ## Fit Parameters (canonical — defined in `params.py`)
 
-| Parameter | Value |
-|---|---|
-| `FIT_CLEARANCE` | 0.4 mm (sliding joints & Option B blind socket fits) |
-| `THREAD_CLEARANCE` | 0.6 mm (subtracted from male thread radii) |
-| `SCREW_THREAD_DIAMETER` | 12.0 mm (M12 × 2.5 mm fat 3D-printable screw) |
-| `THREAD_PITCH` | 2.5 mm (coarse profile for smooth supportless FDM printing) |
-| `FRAME_THICKNESS` | 20.0 mm (24 mm reinforced boss around screw seats) |
-| `SLAT_SPAN` | 170.0 mm (slat span between left and right cradle arms) |
-| `SLAT_DIAMETER` | 10.0 mm (rounded slat bar diameter) |
-| `SLAT_SOCKET_DEPTH` | 10.0 mm (inner face blind socket depth on cradle arms) |
-| `SLAT_TAB_LENGTH` | 15.0 mm (keyed end tab length) |
-| `SLAT_CURVE_RADIUS` | 35.0 mm (upward curvature radius for side slats) |
+| Parameter | Value | Description |
+|---|---|---|
+| `FIT_CLEARANCE` | 0.4 mm | Sliding joints & alignment peg fits |
+| `DOVETAIL_CLEARANCE` | 0.2 mm | Clearance for top-surface snap-fit dovetail slots |
+| `FRAME_THICKNESS` | 20.0 mm | Side stand frame main structural thickness |
+| `SLAT_SPAN` | 170.0 mm | Slat bar span between left and right stand cradle arms |
+| `SLAT_PROFILE` | Stadium / Rounded-Rect | Flat top/bottom with R1.5–2.5 mm filleted edges |
+| `SLAT_DOVETAIL_ANGLE` | 60° | Self-supporting snap-fit dovetail key angle |
 
 ## Dimensions — Scaled 375 mm Variant (canonical model)
 
@@ -80,12 +76,12 @@ The development workflow integrates the following **6 core installed skills** an
 plastic-fruit-basket/
 ├── specs/                           ← project constitution (mission.md, tech-stack.md, roadmap.md)
 ├── params.py                        ← all dimensions + SCALE + paths
-├── part_01_stand_lower_leg.py       ← lower leg with integrated base feet & inner face blind sockets
-├── part_02_stand_middle_leg.py      ← middle S-curve leg section with inner face blind sockets
-├── part_03_stand_upper_leg.py       ← upper leg section with inner face blind sockets
-├── part_04_threaded_pin.py          ← M12 x 2.5mm fat knurled thumb screw
-├── part_05_slat_straight.py         ← straight center floor slat bars & threaded tie-slats
-├── part_06_slat_curved.py           ← curved side retaining slat bars & threaded tie-slats
+├── part_01_stand_lower.py           ← Lower Stand with integrated base feet & top surface dovetails
+├── part_02_stand_middle.py          ← Middle Stand section with top surface dovetails
+├── part_03_stand_upper.py           ← Upper Stand section with top surface dovetails
+├── part_04_slat_middle.py           ← straight middle slat bars with dovetail pegs
+├── part_05_slat_left_curved.py      ← left curved boundary slat bars with dovetail pegs
+├── part_06_slat_right_curved.py     ← right curved boundary slat bars with dovetail pegs
 ├── assembly.py                      ← full 3D assembly script
 ├── export_all.py                    ← regenerates all STEP + STL exports
 ├── run.sh                           ← build & validation runner

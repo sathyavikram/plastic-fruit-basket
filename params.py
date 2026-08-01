@@ -14,26 +14,25 @@ TOTAL_BASE_DEPTH   = 160.0 * SCALE
 TOTAL_STAND_WIDTH  = 320.0 * SCALE
 
 # --- Structural & Fit Parameters ---
-SCREW_THREAD_DIAMETER = 12.0 * SCALE   # M12 fat 3D-printable thumb screw
-THREAD_PITCH          = 2.5 * SCALE    # 2.5 mm coarse thread pitch
-SCREW_HEAD_DIAMETER   = 16.0 * SCALE   # 16 mm simple rounded button head
 FRAME_THICKNESS       = 20.0 * SCALE   # 20 mm side frame panel thickness
 FRAME_BOSS_DIAMETER   = 24.0 * SCALE   # 24 mm reinforced boss around screw seats
 WALL_THICKNESS        = 3.5 * SCALE    # 3.5 mm structural wall thickness
 
 # --- FDM Print Fit Tolerances ---
 FIT_CLEARANCE      = 0.4 * SCALE       # Sliding joints & Option B blind socket fits
-THREAD_CLEARANCE   = 0.6 * SCALE       # Radial/diametral clearance for 3D-printed threads
 PRESS_CLEARANCE    = 0.2 * SCALE       # Press/glue fit clearance
-DOVETAIL_CLEARANCE = 0.2 * SCALE       # Interlocking leg split dovetail clearance
-SIMPLIFIED_THREADS = False             # Set to True to skip generating heavy B-Rep threads for fast assembly rendering
+DOVETAIL_CLEARANCE = 0.2 * SCALE       # Interlocking leg split & slat dovetail clearance
 
 # --- Slatted Bar Basket System Parameters ---
 SLAT_SPAN         = 170.0 * SCALE   # 170 mm slat span between left and right cradle arms
 SLAT_DIAMETER     = 10.0 * SCALE    # 10 mm rounded slat bar diameter
-SLAT_SOCKET_DEPTH = 10.0 * SCALE    # 10 mm Option B inner face blind socket depth
-SLAT_TAB_LENGTH   = 15.0 * SCALE    # 15 mm end tab length
 SLAT_CURVE_RADIUS = 35.0 * SCALE    # 35 mm upward curvature radius for side slats
+
+# --- Dovetail Joint Parameters ---
+SLAT_DOVETAIL_WIDTH = 12.0 * SCALE  # 12 mm wide part of the dovetail
+SLAT_DOVETAIL_NECK  = 8.0 * SCALE   # 8 mm narrow neck of the dovetail
+SLAT_DOVETAIL_DEPTH = 20.0 * SCALE   # 20 mm through-joint (flush with outside of 20mm leg)
+SLAT_DOVETAIL_ANGLE = 60.0          # Angle of dovetail walls
 
 # --- Project Paths ---
 PROJECT_DIR  = os.path.dirname(os.path.abspath(__file__))

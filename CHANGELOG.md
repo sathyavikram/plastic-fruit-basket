@@ -1,11 +1,11 @@
 # Changelog
 
 ## 2026-08-01
-- Pivoted tray architecture from solid 2-piece split bowls to a 100% 3D-printable slatted bar basket system (`part_06_slat_straight.py`, `part_07_slat_curved.py`).
-- Integrated drop-in comb notches along cradle arms of side leg frames (`part_02_stand_lower_leg.py`, `part_03_stand_middle_leg.py`, `part_04_stand_upper_leg.py`).
-- Removed obsolete solid tray script (`part_06_tray_small.py`) and associated export files.
-- Optimized assembly generation by using simplified thread placeholders to prevent FreeCAD OpenCASCADE from hanging during 3D tessellation.
-- Fixed a Python module import bug in `export_all.py` that was accidentally overwriting high-poly printable STLs with simplified visualization placeholders.
+- Implemented Phase 1 Stackable Stand Tiers (`part_01_stand_lower.py`, `part_02_stand_middle.py`, `part_03_stand_upper.py`) featuring 3-piece modular vertical stacking architecture with mortise-and-tenon alignment joints (`0.4 mm` clearance).
+- Designed extended upward-curving cradle arms that lift continuously to form the fruit bowl profile when slats are fitted.
+- Integrated multiple top-surface precision 60° dovetail slots (`0.2 mm` clearance) along cradle arms for drop-in snap-fit slat assembly.
+- Updated `assembly.py` and `export_all.py` to instantiate and export Left and Right Lower, Middle, and Upper Stand tiers.
+- Performed FreeCAD MCP multi-view rendering and 3D stack visual validation.
 
 ## 2026-07-31
 - Resolved an OpenCASCADE boolean constraint hang in `part_05_threaded_pin.py` by applying chamfer cuts to individual components before fusing them into a compound.
