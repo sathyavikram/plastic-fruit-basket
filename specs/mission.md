@@ -20,13 +20,11 @@ Based on reference images (`specs/reference-images/1.jpg`, `2.jpg`, `3.jpg`) and
 - **Total Base Depth**: 160 mm (~6.3")
 - **Total Stand Width**: ~320 mm (~12.6") — *governed by the Large Bottom Bowl envelope length and crossbar span*.
 
-### 2. Removable Oval Bowls (3 Tiers — All 3D Printed)
-- **Top Bowl (Small — Printed)**: ~225 L × 165 W × 57 H mm (8.9" L × 6.5" W × 2.2" H)
-  - Split into 2 interlocking shell halves (Left & Right) with alignment pins to fit within the 175 × 175 mm build plate.
-- **Middle Bowl (Medium — Printed)**: ~260 L × 185 W × 63 H mm (10.2" L × 7.3" W × 2.5" H)
-  - Split into 2 interlocking shell halves (Left & Right) with dovetail keys and alignment pins to fit within the 175 × 175 mm build plate.
-- **Bottom Bowl (Large — Printed)**: ~320 L × 208 W × 68 H mm (12.6" L × 8.2" W × 2.7" H)
-  - Split into 2 interlocking shell halves (Left & Right) with dovetail keys and alignment dowel pins.
+### 2. Removable Slatted Bar Baskets (3 Tiers — All 3D Printed, Zero Split Seams)
+- **Modular Slatted Basket Architecture**: Instead of large solid plastic bowls split down the middle, each tier is constructed from a modern slatted bar basket composed of 100% 3D-printable individual slat bars that drop into pre-modeled comb slots along the side frame cradle arms:
+  - **Center Straight Slats (`part_06_slat_straight.py`)**: Straight horizontal slat rods spanning across the stand width between left and right cradle arms.
+  - **Left & Right Curved Side Slats (`part_07_slat_curved.py`)**: Slat bars that run straight across the center floor and curve smoothly upward at both ends to form the side retaining walls of the basket.
+  - **Option A Drop-in Sockets**: The cradle arms feature precision top notches (`FIT_CLEARANCE = 0.4 mm`) allowing toolless drop-in assembly without requiring large solid bowl splits or glue.
 
 ### 3. Side Support Frames & Cradle Arms (100% 3D Printed)
 - **2 Side Frames (Left & Right — Printed)**: Organic, S-curved vertical side panels with 3 pairs of integrated forward-extending curved cradle arms that securely hold each tier of 3D-printed oval bowls.

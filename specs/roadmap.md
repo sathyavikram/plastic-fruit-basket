@@ -45,29 +45,28 @@ Build, validate, and commit before moving to the next phase.
 
 ---
 
-## Phase 5 — Small Top Oval Tray (`part_06_tray_small.py` — `freecad-fits-tolerances`) ✅
-- Small top oval tray (~225 mm width × 165 mm depth × 57 mm height)
-- Designed as a 2-piece split shell (Left Half & Right Half) joined along the center axis using internal dovetail keys and alignment pins to fit within 175 mm bed limits
-- Export STEP + STL for both halves; execute `freecad-visual-validation` pass
+## Phase 5 — Center Straight Slat Bars (`part_06_slat_straight.py` — `freecad-fits-tolerances`)
+- Straight horizontal slat rods (~170 mm span) that form the middle floor of each basket tier
+- Features keyed end pins/tabs designed to drop into cradle arm comb slots with `FIT_CLEARANCE = 0.4 mm`
+- Print orientation: flat on XY plane; export STEP + STL; execute `freecad-visual-validation` pass
 
 ---
 
-## Phase 6 — Medium Middle Oval Tray (`part_07_tray_medium.py` — `freecad-fits-tolerances`)
-- Middle oval tray (~260 mm width × 185 mm depth × 63 mm height)
-- Designed as a 2-piece split shell (Left Half & Right Half) joined along the center axis using internal dovetail keys and alignment pins
-- Export STEP + STL for both halves; execute `freecad-visual-validation` pass
+## Phase 6 — Curved Side Slat Bars (`part_07_slat_curved.py` — `freecad-fits-tolerances`)
+- Slat bars that run straight across the center and curve upward at both ends to form the side/end walls of the fruit basket
+- Keyed end tabs for drop-in slot insertion into cradle arms
+- Print orientation: flat on bed; export STEP + STL; execute `freecad-visual-validation` pass
 
 ---
 
-## Phase 7 — Large Bottom Oval Tray (`part_08_tray_large.py` — `freecad-fits-tolerances`)
-- Large bottom oval tray (~320 mm width × 208 mm depth × 68 mm height)
-- Designed as a 2-piece split shell (Left Half & Right Half) joined along the center axis using heavy-duty dovetail keys and 4.0 mm alignment dowels
-- Export STEP + STL for both halves; execute `freecad-visual-validation` pass
+## Phase 7 — Cradle Arm Comb Slots & Slat Integration (`part_02_stand_lower_leg.py`, `part_03_stand_middle_leg.py`, `part_04_stand_upper_leg.py` — `freecad-fits-tolerances`)
+- Update side frame cradle arms with top drop-in comb slots/notches (`FIT_CLEARANCE = 0.4 mm`) to receive center and curved side slat bars
+- Verify zero interference and clean drop-in lock
 
 ---
 
 ## Phase 8 — Final Review & Full Assembly (`assembly.py`, `export_all.py` — `freecad-visual-validation` & `changelog-maintenance`)
-- Position all components in `assembly.py` (6 Frame Leg Segments with Integrated Base Feet, 4 Crossbars, 8 M16 Thumb Screws, 6 Tray Halves — 24 sub-parts total)
+- Position all components in `assembly.py` (6 Frame Leg Segments with Integrated Base Feet, 4 Crossbars, 8 Thumb Pins, Center Slats, Curved Side Slats)
 - Execute `export_all.py` to regenerate all clean STEP + STL files in `exports/`
 - Generate full `assembly.step` and `assembly.stl` and perform final visual collision and manifold inspection using `freecad-visual-validation`
 - Append concise dated release notes to `CHANGELOG.md` via `changelog-maintenance`
