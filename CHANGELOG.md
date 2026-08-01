@@ -1,7 +1,9 @@
 # Changelog
 
 ## 2026-08-01
-- Implemented Phase 5 Small Top Oval Tray (`part_06_tray_small.py`) with a boat-like shape and a center split line incorporating two internal dovetail keys and alignment pins to fit the 175 mm bed limit.
+- Pivoted tray architecture from solid 2-piece split bowls to a 100% 3D-printable slatted bar basket system (`part_06_slat_straight.py`, `part_07_slat_curved.py`).
+- Integrated drop-in comb notches along cradle arms of side leg frames (`part_02_stand_lower_leg.py`, `part_03_stand_middle_leg.py`, `part_04_stand_upper_leg.py`).
+- Removed obsolete solid tray script (`part_06_tray_small.py`) and associated export files.
 - Optimized assembly generation by using simplified thread placeholders to prevent FreeCAD OpenCASCADE from hanging during 3D tessellation.
 - Fixed a Python module import bug in `export_all.py` that was accidentally overwriting high-poly printable STLs with simplified visualization placeholders.
 
