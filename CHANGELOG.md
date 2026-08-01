@@ -1,6 +1,12 @@
 # Changelog
 
+## 2026-08-01
+- Optimized assembly generation by using simplified thread placeholders to prevent FreeCAD OpenCASCADE from hanging during 3D tessellation.
+- Fixed a Python module import bug in `export_all.py` that was accidentally overwriting high-poly printable STLs with simplified visualization placeholders.
+
 ## 2026-07-31
+- Resolved an OpenCASCADE boolean constraint hang in `part_05_threaded_pin.py` by applying chamfer cuts to individual components before fusing them into a compound.
+- Removed unused scratch scripts and test files.
 - Implemented Phase 4 threaded fasteners (`part_05_threaded_pin.py`) featuring a 16 mm rounded button head with a 2 mm flathead screwdriver slot and M12 × 2.5 mm coarse threads.
 - Built the complete `assembly.py` integrating the 6 frame segments, 4 crossbars, and 8 thumb pins.
 - Lowered the base foot pad heights in `part_02_stand_lower_leg.py` to ensure clearance for the thumb pin heads.
