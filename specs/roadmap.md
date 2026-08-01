@@ -59,9 +59,9 @@ Build, validate, and commit before moving to the next phase.
 
 ---
 
-## Phase 7 — Cradle Arm Comb Slots & Slat Integration (`part_02_stand_lower_leg.py`, `part_03_stand_middle_leg.py`, `part_04_stand_upper_leg.py` — `freecad-fits-tolerances`) ✅
-- Update side frame cradle arms with top drop-in comb slots/notches (`FIT_CLEARANCE = 0.4 mm`) to receive center and curved side slat bars
-- Verify zero interference and clean drop-in lock
+## Phase 7 — Cradle Arm Inner Blind Sockets & Slat Integration (`part_02_stand_lower_leg.py`, `part_03_stand_middle_leg.py`, `part_04_stand_upper_leg.py` — `freecad-fits-tolerances`) ✅
+- Update side frame cradle arms with Option B 10.0 mm inner blind sockets (`FIT_CLEARANCE = 0.4 mm`) to receive center and curved side slat end pins
+- Verify 100% smooth top cradle arm surfaces and zero interference in captured sandwich assembly lock
 
 ---
 

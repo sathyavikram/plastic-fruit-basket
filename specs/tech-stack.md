@@ -53,7 +53,7 @@ The development workflow integrates the following **6 core installed skills** an
 
 | Parameter | Value |
 |---|---|
-| `FIT_CLEARANCE` | 0.4 mm (sliding joints & comb slot drop-in fits) |
+| `FIT_CLEARANCE` | 0.4 mm (sliding joints & Option B blind socket fits) |
 | `THREAD_CLEARANCE` | 0.6 mm (subtracted from male thread radii) |
 | `SCREW_THREAD_DIAMETER` | 12.0 mm (M12 × 2.5 mm fat 3D-printable screw) |
 | `THREAD_PITCH` | 2.5 mm (coarse profile for smooth supportless FDM printing) |
@@ -62,7 +62,7 @@ The development workflow integrates the following **6 core installed skills** an
 | `FRAME_THICKNESS` | 20.0 mm (24 mm reinforced boss around screw seats) |
 | `SLAT_SPAN` | 170.0 mm (slat span between left and right cradle arms) |
 | `SLAT_DIAMETER` | 10.0 mm (rounded slat bar diameter) |
-| `SLAT_SLOT_DEPTH` | 6.0 mm (drop-in comb slot depth on cradle arms) |
+| `SLAT_SOCKET_DEPTH` | 10.0 mm (inner face blind socket depth on cradle arms) |
 | `SLAT_TAB_LENGTH` | 15.0 mm (keyed end tab length) |
 | `SLAT_CURVE_RADIUS` | 35.0 mm (upward curvature radius for side slats) |
 
