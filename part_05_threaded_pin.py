@@ -116,14 +116,6 @@ def construct_threaded_pin():
     final_part.translate(App.Vector(0, 0, head_thickness))
     
     # Export clean STEP and STL
-    os.makedirs(EXPORT_BASE, exist_ok=True)
-    for path in (EXPORT_STEP, EXPORT_STL):
-        if os.path.exists(path):
-            os.remove(path)
-
-    final_part.exportStep(EXPORT_STEP)
-    final_part.exportStl(EXPORT_STL)
-    print(f"Exported to {EXPORT_STEP} and {EXPORT_STL}")
     return final_part
 
 
@@ -133,6 +125,14 @@ def main():
     feature = doc.addObject("Part::Feature", "ThreadedPin")
     feature.Shape = shape
     doc.recompute()
+
+    os.makedirs(EXPORT_BASE, exist_ok=True)
+    for path in (EXPORT_STEP, EXPORT_STL):
+        if os.path.exists(path):
+            os.remove(path)
+    shape.exportStep(EXPORT_STEP)
+    shape.exportStl(EXPORT_STL)
+    print(f"Exported to {EXPORT_STEP} and {EXPORT_STL}")
 
 if __name__ == "__main__" or sys.argv[-1] == os.path.basename(__file__):
     main()

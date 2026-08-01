@@ -94,14 +94,6 @@ def construct_crossbar():
     body.rotate(App.Vector(0, 0, 0), App.Vector(0, 1, 0), 90)
 
     # Export clean STEP and STL
-    os.makedirs(EXPORT_BASE, exist_ok=True)
-    for path in (EXPORT_STEP, EXPORT_STL):
-        if os.path.exists(path):
-            os.remove(path)
-
-    body.exportStep(EXPORT_STEP)
-    body.exportStl(EXPORT_STL)
-    print(f"Exported to {EXPORT_STEP} and {EXPORT_STL}")
     return body
 
 
@@ -111,6 +103,14 @@ def main():
     feature = doc.addObject("Part::Feature", "Crossbar")
     feature.Shape = shape
     doc.recompute()
+
+    os.makedirs(EXPORT_BASE, exist_ok=True)
+    for path in (EXPORT_STEP, EXPORT_STL):
+        if os.path.exists(path):
+            os.remove(path)
+    shape.exportStep(EXPORT_STEP)
+    shape.exportStl(EXPORT_STL)
+    print(f"Exported to {EXPORT_STEP} and {EXPORT_STL}")
 
 if __name__ == "__main__" or sys.argv[-1] == os.path.basename(__file__):
     main()

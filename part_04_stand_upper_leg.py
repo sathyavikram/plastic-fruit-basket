@@ -122,14 +122,6 @@ def construct_upper_leg():
         print(f"Notice: Upper leg chamfer fallback: {e}")
 
     # Export clean STEP and STL
-    os.makedirs(EXPORT_BASE, exist_ok=True)
-    for path in (EXPORT_STEP, EXPORT_STL):
-        if os.path.exists(path):
-            os.remove(path)
-
-    leg_body.exportStep(EXPORT_STEP)
-    leg_body.exportStl(EXPORT_STL)
-    print(f"Exported to {EXPORT_STEP} and {EXPORT_STL}")
     return leg_body
 
 
@@ -139,6 +131,14 @@ def main():
     feature = doc.addObject("Part::Feature", "UpperLeg")
     feature.Shape = shape
     doc.recompute()
+
+    os.makedirs(EXPORT_BASE, exist_ok=True)
+    for path in (EXPORT_STEP, EXPORT_STL):
+        if os.path.exists(path):
+            os.remove(path)
+    shape.exportStep(EXPORT_STEP)
+    shape.exportStl(EXPORT_STL)
+    print(f"Exported to {EXPORT_STEP} and {EXPORT_STL}")
 
 if __name__ == "__main__" or sys.argv[-1] == os.path.basename(__file__):
     main()
