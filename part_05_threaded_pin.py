@@ -70,6 +70,13 @@ def construct_threaded_pin():
     # 3. Build the core shaft
     core_shaft = Part.makeCylinder(t_r_inner, shaft_length, App.Vector(0, 0, 0), App.Vector(0, 0, 1))
     
+    if os.environ.get("SIMPLIFIED_THREADS") == "1":
+        # Simplified cylinder for rapid assembly visualization
+        simplified_shaft = Part.makeCylinder(t_radius, shaft_length, App.Vector(0, 0, 0), App.Vector(0, 0, 1))
+        final_part = Part.makeCompound([head, simplified_shaft])
+        final_part.translate(App.Vector(0, 0, head_thickness))
+        return final_part
+
     # 4. Build the sweeping thread (using freecad-threading skill)
     t_helix = Part.makeHelix(t_pitch, shaft_length, t_r_inner, 0)
     
@@ -127,4 +134,5 @@ def main():
     feature.Shape = shape
     doc.recompute()
 
-main()
+if __name__ == "__main__" or sys.argv[-1] == os.path.basename(__file__):
+    main()

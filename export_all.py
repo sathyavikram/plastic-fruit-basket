@@ -34,7 +34,8 @@ def run_all():
     # 2. Rebuild full assembly
     if os.path.exists(os.path.join(CURRENT_DIR, "assembly.py")):
         print("--> Rebuilding full assembly...")
-        
+        # Enable simplified threads just for the assembly to prevent hanging/OOM during tessellation
+        os.environ["SIMPLIFIED_THREADS"] = "1"
         try:
             import part_01_crossbar
             import part_05_threaded_pin
@@ -47,6 +48,8 @@ def run_all():
                 mod.main()
         except Exception as e:
             print(f"Error running assembly.py: {e}")
+            
+        os.environ.pop("SIMPLIFIED_THREADS", None)
 
     print("=== All exports completed successfully! ===")
 

@@ -26,6 +26,9 @@ def create_female_thread_cutter(t_radius, t_pitch, depth):
     """
     t_r_inner = t_radius - (t_pitch * 0.45)
     
+    if os.environ.get("SIMPLIFIED_THREADS") == "1":
+        # Simplified cylinder for rapid assembly boolean/visualization
+        return Part.makeCylinder(t_r_inner, depth + 2.0, App.Vector(0, 0, -1.0), App.Vector(0, 0, 1.0))
 
     t_helix = Part.makeHelix(t_pitch, depth, t_r_inner, 0)
 
@@ -109,5 +112,6 @@ def main():
     feature.Shape = shape
     doc.recompute()
 
-main()
+if __name__ == "__main__" or sys.argv[-1] == os.path.basename(__file__):
+    main()
 

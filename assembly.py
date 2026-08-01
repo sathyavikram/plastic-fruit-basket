@@ -127,4 +127,5 @@ def main():
     feature.Shape = shape
     doc.recompute()
 
-main()
+if __name__ == "__main__" or sys.argv[-1] == os.path.basename(__file__):
+    main()
