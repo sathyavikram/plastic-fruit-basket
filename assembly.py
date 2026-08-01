@@ -15,7 +15,6 @@ import params
 import importlib
 importlib.reload(params)
 
-import part_01_crossbar
 import part_02_stand_lower_leg
 import part_03_stand_middle_leg
 import part_04_stand_upper_leg
@@ -31,20 +30,21 @@ EXPORT_STL  = os.path.join(EXPORT_BASE, "assembly.stl")
 
 def build_assembly():
     """
-    Assembles all completed parts (Crossbars, Lower Legs, Middle Legs, Upper Legs, Slatted Basket Bars)
+    Assembles all completed parts (Lower Legs, Middle Legs, Upper Legs, Unified Slat-Tie Bars, Thumb Pins)
     into full 3D assembly space.
     """
     doc = App.newDocument("Assembly")
     comp_items = []
 
     # 1. Generate Base Parts
-    shape_crossbar   = part_01_crossbar.construct_crossbar()
     shape_lower_leg  = part_02_stand_lower_leg.construct_lower_leg()
     shape_middle_leg = part_03_stand_middle_leg.construct_middle_leg()
     shape_upper_leg  = part_04_stand_upper_leg.construct_upper_leg()
     shape_pin        = part_05_threaded_pin.construct_threaded_pin()
-    shape_slat_str   = part_06_slat_straight.construct_straight_slat()
-    shape_slat_crv   = part_07_slat_curved.construct_curved_slat()
+    shape_slat_str   = part_06_slat_straight.construct_straight_slat(is_threaded=False)
+    shape_slat_str_t = part_06_slat_straight.construct_straight_slat(is_threaded=True)
+    shape_slat_crv   = part_07_slat_curved.construct_curved_slat(is_threaded=False)
+    shape_slat_crv_t = part_07_slat_curved.construct_curved_slat(is_threaded=True)
 
     # Dimensions
     frame_thick = params.FRAME_THICKNESS
@@ -68,35 +68,41 @@ def build_assembly():
         shape.translate(App.Vector(right_x, 0, 0))
         comp_items.append(shape)
 
-    # 4. 4 Horizontal Crossbars (Spanning from X=20mm to X=190mm)
-    # Crossbar 1: Front Base (Y=25, Z=15)
-    cb1 = shape_crossbar.copy()
-    cb1.translate(App.Vector(frame_thick, 25.0 * params.SCALE, 15.0 * params.SCALE))
-    comp_items.append(cb1)
+    # 4. Slatted Basket Bars & Threaded Tie-Slats (3 Tiers)
+    # Tier 1 (Bottom): arm_z = 25mm, center_z = 30mm, sockets at Y = 60, 90, 120
+    for i, y in enumerate((60.0 * params.SCALE, 90.0 * params.SCALE, 120.0 * params.SCALE)):
+        # Middle slat (i=1) is threaded tie-slat; outer slats are curved
+        slat = (shape_slat_str_t if i == 1 else shape_slat_crv).copy()
+        slat.translate(App.Vector(mid_x, y, 30.0 * params.SCALE))
+        comp_items.append(slat)
 
-    # Crossbar 2: Rear Base (Y=135, Z=15)
-    cb2 = shape_crossbar.copy()
-    cb2.translate(App.Vector(frame_thick, params.TOTAL_BASE_DEPTH - 25.0 * params.SCALE, 15.0 * params.SCALE))
-    comp_items.append(cb2)
+    # Base Tie-Slats at Y=25mm and Y=135mm (Z=15mm)
+    slat_b1 = shape_slat_str_t.copy()
+    slat_b1.translate(App.Vector(mid_x, 25.0 * params.SCALE, 15.0 * params.SCALE))
+    comp_items.append(slat_b1)
 
-    # Crossbar 3: Middle Tier (just above medium arm, Z=155)
-    cb3 = shape_crossbar.copy()
-    cb3_y = params.get_leg_y_at_z(155.0 * params.SCALE)
-    cb3.translate(App.Vector(frame_thick, cb3_y, 155.0 * params.SCALE))
-    comp_items.append(cb3)
+    slat_b2 = shape_slat_str_t.copy()
+    slat_b2.translate(App.Vector(mid_x, params.TOTAL_BASE_DEPTH - 25.0 * params.SCALE, 15.0 * params.SCALE))
+    comp_items.append(slat_b2)
 
-    # Crossbar 4: Top Tier (just above small arm, Z=280)
-    cb4 = shape_crossbar.copy()
-    cb4_y = params.get_leg_y_at_z(280.0 * params.SCALE)
-    cb4.translate(App.Vector(frame_thick, cb4_y, 280.0 * params.SCALE))
-    comp_items.append(cb4)
+    # Tier 2 (Middle): arm_z = 125mm, center_z = 130mm, sockets at Y = 60, 85, 110
+    for i, y in enumerate((60.0 * params.SCALE, 85.0 * params.SCALE, 110.0 * params.SCALE)):
+        slat = (shape_slat_str_t if i == 1 else shape_slat_crv).copy()
+        slat.translate(App.Vector(mid_x, y, 130.0 * params.SCALE))
+        comp_items.append(slat)
 
-    # 5. Threaded Fasteners (Thumb Pins)
+    # Tier 3 (Top): arm_z = 250mm, center_z = 255mm, sockets at Y = 50, 70, 90
+    for i, y in enumerate((50.0 * params.SCALE, 70.0 * params.SCALE, 90.0 * params.SCALE)):
+        slat = (shape_slat_str_t if i == 1 else shape_slat_crv).copy()
+        slat.translate(App.Vector(mid_x, y, 255.0 * params.SCALE))
+        comp_items.append(slat)
+
+    # 5. Threaded Fasteners (Thumb Pins into Slat Tie-Bars)
     pin_coords = [
         (25.0 * params.SCALE, 15.0 * params.SCALE),
         (params.TOTAL_BASE_DEPTH - 25.0 * params.SCALE, 15.0 * params.SCALE),
-        (cb3_y, 155.0 * params.SCALE),
-        (cb4_y, 280.0 * params.SCALE)
+        (85.0 * params.SCALE, 130.0 * params.SCALE),
+        (70.0 * params.SCALE, 255.0 * params.SCALE)
     ]
 
     for y, z in pin_coords:
