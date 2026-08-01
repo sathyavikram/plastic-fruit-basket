@@ -110,23 +110,23 @@ def build_assembly():
         pin_r.translate(App.Vector(right_x + frame_thick, y, z))
         comp_items.append(pin_r)
 
-    # 6. Slatted Basket Bars (3 Tiers dropped into cradle arm comb slots)
-    # Tier 1 (Bottom): Z=25mm, slots at Y = 60, 90, 120
+    # 6. Slatted Basket Bars (3 Tiers inserted into Option B inner blind sockets)
+    # Tier 1 (Bottom): arm_z = 25mm, center_z = 30mm, sockets at Y = 60, 90, 120
     for i, y in enumerate((60.0 * params.SCALE, 90.0 * params.SCALE, 120.0 * params.SCALE)):
         slat = (shape_slat_crv if i in (0, 2) else shape_slat_str).copy()
-        slat.translate(App.Vector(mid_x, y, 25.0 * params.SCALE))
+        slat.translate(App.Vector(mid_x, y, 30.0 * params.SCALE))
         comp_items.append(slat)
 
-    # Tier 2 (Middle): Z=125mm, slots at Y = 60, 85, 110
+    # Tier 2 (Middle): arm_z = 125mm, center_z = 130mm, sockets at Y = 60, 85, 110
     for i, y in enumerate((60.0 * params.SCALE, 85.0 * params.SCALE, 110.0 * params.SCALE)):
         slat = (shape_slat_crv if i in (0, 2) else shape_slat_str).copy()
-        slat.translate(App.Vector(mid_x, y, 125.0 * params.SCALE))
+        slat.translate(App.Vector(mid_x, y, 130.0 * params.SCALE))
         comp_items.append(slat)
 
-    # Tier 3 (Top): Z=250mm, slots at Y = 50, 70, 90
+    # Tier 3 (Top): arm_z = 250mm, center_z = 255mm, sockets at Y = 50, 70, 90
     for i, y in enumerate((50.0 * params.SCALE, 70.0 * params.SCALE, 90.0 * params.SCALE)):
         slat = (shape_slat_crv if i in (0, 2) else shape_slat_str).copy()
-        slat.translate(App.Vector(mid_x, y, 250.0 * params.SCALE))
+        slat.translate(App.Vector(mid_x, y, 255.0 * params.SCALE))
         comp_items.append(slat)
 
     # 6. Compound Assembly Shape
