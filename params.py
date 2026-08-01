@@ -29,7 +29,14 @@ PRESS_CLEARANCE    = 0.2 * SCALE       # Press/glue fit clearance
 DOVETAIL_CLEARANCE = 0.2 * SCALE       # Interlocking tray split dovetail clearance
 SIMPLIFIED_THREADS = False             # Set to True to skip generating heavy B-Rep threads (useful for assembly generation)
 
-# --- 3-Tier Removable Oval Bowl Dimensions ---
+# --- Slatted Bar Basket System Parameters ---
+SLAT_SPAN         = 170.0 * SCALE   # 170 mm slat span between left and right cradle arms
+SLAT_DIAMETER     = 10.0 * SCALE    # 10 mm rounded slat bar diameter
+SLAT_SLOT_DEPTH   = 6.0 * SCALE     # 6 mm drop-in comb slot depth
+SLAT_TAB_LENGTH   = 15.0 * SCALE    # 15 mm keyed end tab length
+SLAT_CURVE_RADIUS = 35.0 * SCALE    # 35 mm upward curvature radius for side slats
+
+# --- 3-Tier Removable Oval Bowl / Basket Dimensions ---
 TRAY_SMALL_LENGTH  = 225.0 * SCALE
 TRAY_SMALL_WIDTH   = 165.0 * SCALE
 TRAY_SMALL_HEIGHT  = 57.0 * SCALE

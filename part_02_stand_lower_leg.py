@@ -146,7 +146,16 @@ def construct_lower_leg():
 
     leg_body = leg_body.cut(cyl1).cut(cyl2)
 
-    # 7. Top Tenon Alignment Peg at Z=125mm for joining part_03
+    # 7. Drop-in Comb Notches for Slatted Bar Basket (Option A)
+    # Cut 3 notches along the top face of the cradle arm at Z=25mm
+    notch_r = (params.SLAT_DIAMETER / 2.0) + (params.FIT_CLEARANCE / 2.0)
+    notch_depth = params.SLAT_SLOT_DEPTH
+    for y_pos in (60.0 * params.SCALE, 90.0 * params.SCALE, 120.0 * params.SCALE):
+        comb_cut = Part.makeBox(params.SLAT_TAB_LENGTH + 2.0 * params.SCALE, notch_r * 2.0, notch_depth + 2.0 * params.SCALE,
+                                App.Vector(-1.0 * params.SCALE, y_pos - notch_r, 25.0 * params.SCALE - notch_depth))
+        leg_body = leg_body.cut(comb_cut)
+
+    # 8. Top Tenon Alignment Peg at Z=125mm for joining part_03
     # Use a single, perfectly centered 10x10x10 tenon
     tenon_size = 10.0 * params.SCALE
     top_y = params.get_leg_y_at_z(height) # This is the exact center of the leg curve

@@ -98,7 +98,16 @@ def construct_upper_leg():
     cyl = Part.makeCylinder(bore_r, thickness + 4.0 * params.SCALE, App.Vector(-2.0 * params.SCALE, cb_y, cb_z), App.Vector(1, 0, 0))
     leg_body = leg_body.cut(cyl)
 
-    # 4. Bottom Female Mortise Socket at Z=250mm
+    # 4. Drop-in Comb Notches for Slatted Bar Basket (Option A)
+    # Cut 3 notches along the top face of the upper cradle arm at Z=250mm
+    notch_r = (params.SLAT_DIAMETER / 2.0) + (params.FIT_CLEARANCE / 2.0)
+    notch_depth = params.SLAT_SLOT_DEPTH
+    for y_pos in (50.0 * params.SCALE, 70.0 * params.SCALE, 90.0 * params.SCALE):
+        comb_cut = Part.makeBox(params.SLAT_TAB_LENGTH + 2.0 * params.SCALE, notch_r * 2.0, notch_depth + 2.0 * params.SCALE,
+                                App.Vector(-1.0 * params.SCALE, y_pos - notch_r, 250.0 * params.SCALE - notch_depth))
+        leg_body = leg_body.cut(comb_cut)
+
+    # 5. Bottom Female Mortise Socket at Z=250mm
     clr = params.FIT_CLEARANCE
     m_size = 10.0 * params.SCALE + clr
     bot_y = params.get_leg_y_at_z(start_z)
