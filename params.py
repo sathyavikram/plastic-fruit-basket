@@ -1,6 +1,7 @@
 SCALE = 1.0
 
 import os
+import math
 
 # --- Build Volume Constraints ---
 BUILD_PLATE_X = 175.0 * SCALE
@@ -16,38 +17,23 @@ TOTAL_STAND_WIDTH  = 320.0 * SCALE
 SCREW_THREAD_DIAMETER = 12.0 * SCALE   # M12 fat 3D-printable thumb screw
 THREAD_PITCH          = 2.5 * SCALE    # 2.5 mm coarse thread pitch
 SCREW_HEAD_DIAMETER   = 16.0 * SCALE   # 16 mm simple rounded button head
-CROSSBAR_LENGTH       = 170.0 * SCALE  # 170 mm crossbar length (fits flat on 175 mm bed)
-CROSSBAR_DIAMETER     = 18.0 * SCALE   # 18 mm outer diameter (provides 3.0 mm wall around M12 thread)
 FRAME_THICKNESS       = 20.0 * SCALE   # 20 mm side frame panel thickness
 FRAME_BOSS_DIAMETER   = 24.0 * SCALE   # 24 mm reinforced boss around screw seats
 WALL_THICKNESS        = 3.5 * SCALE    # 3.5 mm structural wall thickness
 
 # --- FDM Print Fit Tolerances ---
-FIT_CLEARANCE      = 0.4 * SCALE       # Sliding joints & mortise-and-tenon alignment pegs
+FIT_CLEARANCE      = 0.4 * SCALE       # Sliding joints & Option B blind socket fits
 THREAD_CLEARANCE   = 0.6 * SCALE       # Radial/diametral clearance for 3D-printed threads
 PRESS_CLEARANCE    = 0.2 * SCALE       # Press/glue fit clearance
-DOVETAIL_CLEARANCE = 0.2 * SCALE       # Interlocking tray split dovetail clearance
-SIMPLIFIED_THREADS = False             # Set to True to skip generating heavy B-Rep threads (useful for assembly generation)
+DOVETAIL_CLEARANCE = 0.2 * SCALE       # Interlocking leg split dovetail clearance
+SIMPLIFIED_THREADS = False             # Set to True to skip generating heavy B-Rep threads for fast assembly rendering
 
 # --- Slatted Bar Basket System Parameters ---
 SLAT_SPAN         = 170.0 * SCALE   # 170 mm slat span between left and right cradle arms
 SLAT_DIAMETER     = 10.0 * SCALE    # 10 mm rounded slat bar diameter
-SLAT_SLOT_DEPTH   = 6.0 * SCALE     # 6 mm drop-in comb slot depth
-SLAT_TAB_LENGTH   = 15.0 * SCALE    # 15 mm keyed end tab length
+SLAT_SOCKET_DEPTH = 10.0 * SCALE    # 10 mm Option B inner face blind socket depth
+SLAT_TAB_LENGTH   = 15.0 * SCALE    # 15 mm end tab length
 SLAT_CURVE_RADIUS = 35.0 * SCALE    # 35 mm upward curvature radius for side slats
-
-# --- 3-Tier Removable Oval Bowl / Basket Dimensions ---
-TRAY_SMALL_LENGTH  = 225.0 * SCALE
-TRAY_SMALL_WIDTH   = 165.0 * SCALE
-TRAY_SMALL_HEIGHT  = 57.0 * SCALE
-
-TRAY_MEDIUM_LENGTH = 260.0 * SCALE
-TRAY_MEDIUM_WIDTH  = 185.0 * SCALE
-TRAY_MEDIUM_HEIGHT = 63.0 * SCALE
-
-TRAY_LARGE_LENGTH  = 320.0 * SCALE
-TRAY_LARGE_WIDTH   = 208.0 * SCALE
-TRAY_LARGE_HEIGHT  = 68.0 * SCALE
 
 # --- Project Paths ---
 PROJECT_DIR  = os.path.dirname(os.path.abspath(__file__))
@@ -59,18 +45,7 @@ MEDIA_DIR    = os.path.join(PROJECT_DIR, "media")
 for d in (EXPORT_DIR, PRINT_3D_DIR, MEDIA_DIR):
     os.makedirs(d, exist_ok=True)
 
-if __name__ == "__main__":
-    print("params.py loaded successfully!")
-    print(f"SCALE: {SCALE}")
-    print(f"Target System Envelope: {TOTAL_STAND_HEIGHT}mm H x {TOTAL_BASE_DEPTH}mm D x {TOTAL_STAND_WIDTH}mm W")
-    print(f"Build Plate Limits: {BUILD_PLATE_X} x {BUILD_PLATE_Y} x {BUILD_PLATE_Z} mm")
-
-import math
-
 # --- Curved Leg Geometry Helper ---
-# The vertical leg bows backwards (into negative Y) to make room for the bowls.
-# It forms an arc that passes through Y=40 at Z=25 (bottom) and Z=375 (top),
-# and bows back to Y=-20 at Z=200 (middle).
 C_Y = 265.2 * SCALE
 C_Z = 200.0 * SCALE
 R_FRONT = 305.2 * SCALE
@@ -84,3 +59,10 @@ def get_leg_y_at_z(z_val):
     y_front = C_Y - math.sqrt(R_FRONT**2 - dz**2)
     y_back = C_Y - math.sqrt(R_BACK**2 - dz**2)
     return (y_front + y_back) / 2.0
+
+
+if __name__ == "__main__":
+    print("params.py loaded successfully!")
+    print(f"SCALE: {SCALE}")
+    print(f"Target System Envelope: {TOTAL_STAND_HEIGHT}mm H x {TOTAL_BASE_DEPTH}mm D x {TOTAL_STAND_WIDTH}mm W")
+    print(f"Build Plate Limits: {BUILD_PLATE_X} x {BUILD_PLATE_Y} x {BUILD_PLATE_Z} mm")

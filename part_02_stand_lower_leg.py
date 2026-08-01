@@ -29,7 +29,7 @@ def construct_lower_leg():
     depth     = params.TOTAL_BASE_DEPTH      # 160mm
     height    = 125.0 * params.SCALE
     bore_r    = (params.SCREW_THREAD_DIAMETER / 2.0) + (0.5 * params.SCALE) # 6.5mm (13mm bore)
-    boss_r    = (params.CROSSBAR_DIAMETER / 2.0) + (3.0 * params.SCALE)     # 12mm (24mm OD boss)
+    boss_r    = params.FRAME_BOSS_DIAMETER / 2.0                            # 12mm (24mm OD boss)
 
     # 1. Main Base Bar (horizontal foot along Y-axis)
     # Start it at Y=-100 and chop it with the outer leg cylinder so its back perfectly matches the leg curve

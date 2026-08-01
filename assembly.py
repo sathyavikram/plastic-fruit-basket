@@ -48,7 +48,7 @@ def build_assembly():
 
     # Dimensions
     frame_thick = params.FRAME_THICKNESS
-    bar_len     = params.CROSSBAR_LENGTH
+    bar_len     = params.SLAT_SPAN
     right_x     = bar_len + frame_thick  # X = 190mm
     mid_x       = (right_x + frame_thick) / 2.0 # X = 105mm center span
 

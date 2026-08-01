@@ -17,7 +17,7 @@
 The development workflow integrates the following **6 core installed skills** and the **FreeCAD MCP Server** (`freecad` toolset):
 
 1. **`freecad-project`**: Standardizes project layout, `params.py` single source of truth, `part_NN_name.py` design, `assembly.py`, `export_all.py`, `run.sh` runner, and print orientations.
-2. **`freecad-fits-tolerances`**: Defines clearances for sliding joints (`0.4 mm`), press/glue fits (`0.2 mm`), interlocking dovetail keys, and mortise-and-tenon alignment pegs.
+2. **`freecad-fits-tolerances`**: Defines clearances for sliding joints (`0.4 mm`), press/glue fits (`0.2 mm`), interlocking dovetail keys, and Option B inner face blind sockets (`10.0 mm` depth).
 3. **`freecad-threading`**: Governs 3D-printable M12 × 2.5 mm male and female threads via `Part.makeHelix` and `makePipeShell` with `THREAD_CLEARANCE = 0.6 mm` subtracted from male outer radii.
 4. **`freecad-visual-validation`**: Mandates headless Python execution, runtime error catching, and validation using the **FreeCAD MCP Server** tools:
    - **Script Execution & Error Debugging**: Executes FreeCAD Python scripts (`part_*.py`, `assembly.py`), catching Python syntax errors, tracebacks, OpenCASCADE boolean failures, unhandled exceptions, and missing export files.
@@ -57,8 +57,6 @@ The development workflow integrates the following **6 core installed skills** an
 | `THREAD_CLEARANCE` | 0.6 mm (subtracted from male thread radii) |
 | `SCREW_THREAD_DIAMETER` | 12.0 mm (M12 × 2.5 mm fat 3D-printable screw) |
 | `THREAD_PITCH` | 2.5 mm (coarse profile for smooth supportless FDM printing) |
-| `CROSSBAR_DIAMETER` | 18.0 mm (gives 3.0 mm solid wall thickness around M12 threads) |
-| `CROSSBAR_LENGTH` | 170.0 mm (fits flat on 175 mm bed limit) |
 | `FRAME_THICKNESS` | 20.0 mm (24 mm reinforced boss around screw seats) |
 | `SLAT_SPAN` | 170.0 mm (slat span between left and right cradle arms) |
 | `SLAT_DIAMETER` | 10.0 mm (rounded slat bar diameter) |
