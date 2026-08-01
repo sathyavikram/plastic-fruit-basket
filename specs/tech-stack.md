@@ -53,15 +53,18 @@ The development workflow integrates the following **6 core installed skills** an
 
 | Parameter | Value |
 |---|---|
-| `FIT_CLEARANCE` | 0.4 mm (sliding joints & pin sockets) |
+| `FIT_CLEARANCE` | 0.4 mm (sliding joints & comb slot drop-in fits) |
 | `THREAD_CLEARANCE` | 0.6 mm (subtracted from male thread radii) |
 | `SCREW_THREAD_DIAMETER` | 12.0 mm (M12 × 2.5 mm fat 3D-printable screw) |
 | `THREAD_PITCH` | 2.5 mm (coarse profile for smooth supportless FDM printing) |
 | `CROSSBAR_DIAMETER` | 18.0 mm (gives 3.0 mm solid wall thickness around M12 threads) |
 | `CROSSBAR_LENGTH` | 170.0 mm (fits flat on 175 mm bed limit) |
-| `FRAME_THICKNESS` | 20.0 mm (24 mm reinforced boss around M16 screw seats) |
-| `WALL_THICKNESS` | 3.5 mm (main shell wall thickness) |
-| `DOVETAIL_CLEARANCE`| 0.2 mm (interlocking tray split key) |
+| `FRAME_THICKNESS` | 20.0 mm (24 mm reinforced boss around screw seats) |
+| `SLAT_SPAN` | 170.0 mm (slat span between left and right cradle arms) |
+| `SLAT_DIAMETER` | 10.0 mm (rounded slat bar diameter) |
+| `SLAT_SLOT_DEPTH` | 6.0 mm (drop-in comb slot depth on cradle arms) |
+| `SLAT_TAB_LENGTH` | 15.0 mm (keyed end tab length) |
+| `SLAT_CURVE_RADIUS` | 35.0 mm (upward curvature radius for side slats) |
 
 ## Dimensions — Scaled 375 mm Variant (canonical model)
 
@@ -70,9 +73,7 @@ The development workflow integrates the following **6 core installed skills** an
 | Total Stand Height | 14.8" | 375 mm |
 | Total Base Depth | 6.3" | 160 mm |
 | Total Stand Width | 12.6" | 320 mm |
-| Small Tray (Top) W × D × H | 8.9" × 6.5" × 2.2" | 225 × 165 × 57 mm |
-| Medium Tray (Middle) W × D × H | 10.2" × 7.3" × 2.5" | 260 × 185 × 63 mm |
-| Large Tray (Bottom) W × D × H | 12.6" × 8.2" × 2.7" | 320 × 208 × 68 mm |
+| Slat Bar Span | 6.7" | 170 mm |
 | Frame Tier Angle | ~65° | 65° incline |
 
 ## File & Folder Structure
@@ -81,15 +82,14 @@ The development workflow integrates the following **6 core installed skills** an
 plastic-fruit-basket/
 ├── specs/                           ← project constitution (mission.md, tech-stack.md, roadmap.md)
 ├── params.py                        ← all dimensions + SCALE + paths
-├── part_01_crossbar.py              ← 24mm OD crossbar with M16 female sockets
-├── part_02_stand_lower_leg.py       ← lower leg with integrated base feet & recessed pad pockets
-├── part_03_stand_middle_leg.py      ← middle S-curve leg section
-├── part_04_stand_upper_leg.py       ← upper leg section
-├── part_05_threaded_pin.py          ← M16 x 3.5mm fat knurled thumb screw
-├── part_06_tray_small.py            ← top tray (2-piece split)
-├── part_07_tray_medium.py           ← middle tray (2-piece split)
-├── part_08_tray_large.py            ← bottom tray (2-piece split)
-├── assembly.py                      ← full 24-part assembly script
+├── part_01_crossbar.py              ← 18mm OD crossbar with M12 female sockets
+├── part_02_stand_lower_leg.py       ← lower leg with integrated base feet, comb slots & pad pockets
+├── part_03_stand_middle_leg.py      ← middle S-curve leg section with comb slots
+├── part_04_stand_upper_leg.py       ← upper leg section with comb slots
+├── part_05_threaded_pin.py          ← M12 x 2.5mm fat knurled thumb screw
+├── part_06_slat_straight.py         ← straight center floor slat bars
+├── part_07_slat_curved.py           ← curved side retaining slat bars
+├── assembly.py                      ← full 3D assembly script
 ├── export_all.py                    ← regenerates all STEP + STL exports
 ├── run.sh                           ← build & validation runner
 ├── README.md
